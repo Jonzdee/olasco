@@ -71,23 +71,80 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.3 });
   document.querySelectorAll('.stats-block').forEach(el => counterObs.observe(el));
 
-  /* ─── CONTACT FORM ─── */
+  /* ─── CONTACT FORM — EmailJS ─── */
+  /*
+   * SETUP INSTRUCTIONS:
+   * 1. Go to https://www.emailjs.com and create a free account
+   * 2. Add an Email Service (Gmail, Outlook, etc.) → copy your Service ID
+   * 3. Create an Email Template → copy your Template ID
+   *    Suggested template variables: {{from_name}}, {{from_email}}, {{company}},
+   *    {{phone}}, {{service}}, {{location}}, {{budget}}, {{timeline}}, {{message}}, {{nda}}
+   * 4. Go to Account → API Keys → copy your Public Key
+   * 5. Replace the three placeholder strings below with your real values
+   */
+  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'AbCdEfGhIjKlMnOp'
+
   const form = document.getElementById('contactForm');
   if (form) {
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = form.querySelector('button[type="submit"]');
-      const msg = document.getElementById('formMessage');
-      btn.textContent = 'Sending...';
+      const btn  = form.querySelector('button[type="submit"]');
+      const msg  = document.getElementById('formMessage');
+      const data = new FormData(form);
+
+      // Build template params matching your EmailJS template variables
+      const params = {
+        from_name : `${data.get('firstName')} ${data.get('lastName')}`,
+        from_email: data.get('email'),
+        phone     : data.get('phone')    || 'Not provided',
+        company   : data.get('company'),
+        service   : data.get('service')  || 'Not specified',
+        location  : data.get('location') || 'Not specified',
+        budget    : data.get('budget')   || 'Not specified',
+        timeline  : data.get('timeline') || 'Not specified',
+        message   : data.get('message'),
+        nda       : form.querySelector('#nda')?.checked ? 'Yes — NDA required' : 'No',
+        reply_to  : data.get('email'),
+      };
+
+      btn.textContent = 'Sending…';
       btn.disabled = true;
-      setTimeout(() => {
-        msg.textContent = '✓ Thank you. Our engineering team will respond within 24 hours.';
-        msg.className = 'form-msg success';
-        form.reset();
+      msg.className = 'form-msg';
+      msg.textContent = '';
+
+      // Guard: if keys are still placeholder, simulate success in dev
+      if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+        await new Promise(r => setTimeout(r, 1000));
+        msg.textContent = '⚠ EmailJS not configured yet. Add your keys to js/main.js to enable real sending.';
+        msg.className = 'form-msg warn';
         btn.textContent = 'Send Enquiry →';
         btn.disabled = false;
-        setTimeout(() => { msg.className = 'form-msg'; msg.textContent = ''; }, 8000);
-      }, 1200);
+        return;
+      }
+
+      try {
+        if (typeof emailjs === 'undefined') throw new Error('EmailJS library not loaded');
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+        msg.textContent = '✓ Enquiry sent. Our engineering team will respond within 24 hours.';
+        msg.className = 'form-msg success';
+        form.reset();
+
+        // GA4 event (fires only if GA is loaded)
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_submit', { event_category: 'Contact', event_label: params.service });
+        }
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        msg.textContent = '✗ Something went wrong. Please email us directly at projects@olasco.ng';
+        msg.className = 'form-msg error';
+      } finally {
+        btn.textContent = 'Send Enquiry →';
+        btn.disabled = false;
+        setTimeout(() => { msg.className = 'form-msg'; msg.textContent = ''; }, 10000);
+      }
     });
   }
 

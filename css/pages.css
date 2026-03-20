@@ -10,75 +10,187 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 0 3.5rem;
+  padding: 0;
 }
 .hero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 65% 50%, rgba(232,83,10,0.065) 0%, transparent 65%),
-    linear-gradient(150deg, #0a0c0f 30%, #1c0e05 100%);
+    radial-gradient(ellipse 60% 70% at 15% 55%, rgba(232,83,10,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 30%, rgba(232,83,10,0.04) 0%, transparent 60%),
+    linear-gradient(160deg, #070809 0%, #0d0f12 50%, #180c04 100%);
 }
 .hero-grid-lines {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(232,83,10,0.065) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,83,10,0.065) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 90% at 50% 50%, black 25%, transparent 100%);
+    linear-gradient(rgba(232,83,10,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,83,10,0.055) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 100% 100% at 0% 100%, black 0%, transparent 70%);
 }
+
+/* Vertical side label */
+.hero-side-label {
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(232,83,10,0.22);
+  white-space: nowrap;
+  z-index: 2;
+  animation: fadeIn 1.2s 1.4s both;
+}
+
 #sparks { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
 .hero-content {
   position: relative; z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
-  padding-top: 5rem;
+  padding: calc(var(--nav-h) + 3rem) 3.5rem 3rem;
 }
+
+/* ── EYEBROW ── */
 .hero-eyebrow {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--flame);
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   opacity: 0;
-  animation: fadeUp 0.8s 0.15s forwards;
+  animation: fadeUp 0.7s 0.1s forwards;
 }
 .hero-eyebrow::before { content: ''; width: 36px; height: 1px; background: var(--flame); }
-.hero-h1 {
-  font-size: clamp(4.5rem, 12vw, 11rem);
+
+/* ── STAGGERED HEADLINE ── */
+.hero-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0;
+  overflow: visible;
+}
+
+/* Row 1 — "STEEL" huge outlined, right-aligned, slides in from right */
+.hh-row-1 {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 4rem;
+  opacity: 0;
+  animation: slideFromRight 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+}
+.hh-word-steel {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(4rem, 10vw, 8rem);
   font-weight: 900;
-  color: #fff;
   line-height: 0.88;
-  opacity: 0;
-  animation: fadeUp 0.9s 0.35s forwards;
-}
-.hero-h1 .outline {
-  -webkit-text-stroke: 1.5px rgba(255,255,255,0.2);
+  -webkit-text-stroke: clamp(1px, 0.12vw, 2px) rgba(255,255,255,0.2);
   color: transparent;
+  letter-spacing: -0.01em;
+  user-select: none;
 }
-.hero-h1 .fire { color: var(--flame); }
-.hero-sub {
-  margin-top: 2.2rem;
-  max-width: 500px;
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.75;
-  color: var(--steel);
+
+/* Row 2 — separator line + "BORN IN" + year badge */
+.hh-row-2 {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.6rem 0;
   opacity: 0;
-  animation: fadeUp 0.9s 0.55s forwards;
+  animation: fadeUp 0.7s 0.55s forwards;
+}
+.hh-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232,83,10,0.5), rgba(232,83,10,0.1));
+}
+.hh-midword {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--steel);
+  white-space: nowrap;
+}
+.hh-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--flame);
+  border: 1px solid rgba(232,83,10,0.3);
+  padding: 0.3rem 0.8rem;
+  white-space: nowrap;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+/* Row 3 — "NIGERIA." huge flame, left-aligned, slides in from left */
+.hh-row-3 {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 0;
+  opacity: 0;
+  animation: slideFromLeft 0.9s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
+}
+.hh-word-nigeria {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 900;
+  line-height: 0.88;
+  color: var(--flame);
+  letter-spacing: -0.01em;
+  user-select: none;
+}
+
+/* Row 4 — sub + actions, floated right, slides up */
+.hh-row-4 {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+.hh-right-block {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.hero-sub {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--steel);
+  border-left: 2px solid rgba(232,83,10,0.3);
+  padding-left: 1rem;
 }
 .hero-actions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 2.5rem;
-  opacity: 0;
-  animation: fadeUp 0.9s 0.75s forwards;
+}
+
+/* Slide animations */
+@keyframes slideFromRight {
+  from { opacity: 0; transform: translateX(80px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideFromLeft {
+  from { opacity: 0; transform: translateX(-80px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 .hero-scroll-hint {
   position: absolute;
@@ -754,8 +866,13 @@
   .stats-block { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
-  #hero { padding: 0 1.5rem; }
-  .hero-h1 { font-size: clamp(3.5rem, 14vw, 6rem); }
+  #hero { padding: 0; }
+  .hero-content { padding: calc(var(--nav-h) + 2rem) 1.5rem 2rem; }
+  .hh-row-1 { padding-right: 0; }
+  .hh-word-steel, .hh-word-nigeria { font-size: clamp(4.5rem, 22vw, 8rem); }
+  .hh-row-4 { justify-content: flex-start; }
+  .hh-right-block { max-width: 100%; }
+  .hero-side-label { display: none; }
   .stats-block { padding: 0 1.5rem; grid-template-columns: repeat(2, 1fr); }
   .sectors-grid { grid-template-columns: repeat(2, 1fr); }
   .team-grid { grid-template-columns: 1fr; }

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | Olasco Engineering & Fabrication</title>
+  <meta name="description" content="Photo gallery of Olasco Engineering's fabrication workshop, equipment, completed structural steel, pipe spools, pressure vessels, and before/after project visuals.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <style>
+    /* ── GALLERY FILTER BAR ── */
+    .gal-filter {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    /* ── MASONRY-STYLE PHOTO GRID ── */
+    .photo-grid {
+      columns: 3;
+      column-gap: 1px;
+      background: rgba(232,83,10,0.06);
+    }
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 1px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      display: block;
+    }
+    .photo-item .photo-inner {
+      width: 100%;
+      display: block;
+      background: var(--plate);
+      transition: transform 0.4s ease;
+    }
+    .photo-item:hover .photo-inner { transform: scale(1.03); }
+    .photo-item .photo-cap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem 1.25rem 1rem;
+      background: linear-gradient(to top, rgba(10,12,15,0.92) 0%, transparent 100%);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .photo-item:hover .photo-cap { transform: translateY(0); }
+    .photo-cat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--flame);
+      margin-bottom: 0.2rem;
+    }
+    .photo-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed; inset: 0;
+      z-index: 1000;
+      background: rgba(5,6,8,0.96);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox-img {
+      max-width: 880px;
+      width: 100%;
+      max-height: 72vh;
+    }
+    #lightbox-info {
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+    #lightbox-cat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--flame);
+      margin-bottom: 0.3rem;
+    }
+    #lightbox-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    #lightbox-desc {
+      font-size: 0.83rem;
+      font-weight: 300;
+      color: var(--steel);
+      margin-top: 0.35rem;
+    }
+    .lb-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--steel);
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .lb-close:hover { color: #fff; }
+    .lb-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(232,83,10,0.15);
+      border: 1px solid rgba(232,83,10,0.25);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      width: 46px; height: 46px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lb-nav:hover { background: rgba(232,83,10,0.35); }
+    #lb-prev { left: 1.5rem; }
+    #lb-next { right: 1.5rem; }
+    #lb-counter {
+      position: absolute;
+      bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: rgba(139,153,166,0.5);
+      text-transform: uppercase;
+    }
+
+    /* ── BEFORE / AFTER ── */
+    .ba-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+      margin-top: 3.5rem;
+    }
+    .ba-card {
+      border: 1px solid rgba(232,83,10,0.1);
+      background: var(--plate);
+      overflow: hidden;
+    }
+    .ba-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid rgba(232,83,10,0.1);
+    }
+    .ba-tab {
+      padding: 0.7rem 1.25rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--steel);
+      border-right: 1px solid rgba(232,83,10,0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .ba-tab:last-child { border-right: none; }
+    .ba-tab.drawing { color: var(--steel); }
+    .ba-tab.finished { color: #4ade80; }
+    .ba-tab svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .ba-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .ba-panel {
+      position: relative;
+      overflow: hidden;
+    }
+    .ba-panel + .ba-panel {
+      border-left: 2px solid rgba(232,83,10,0.3);
+    }
+    .ba-panel svg {
+      width: 100%;
+      display: block;
+    }
+    .ba-divider-label {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--forge);
+      border: 1px solid rgba(232,83,10,0.4);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--flame);
+      padding: 0.25rem 0.5rem;
+      white-space: nowrap;
+      z-index: 2;
+    }
+    .ba-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(232,83,10,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ba-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .ba-spec {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--steel);
+      margin-top: 0.15rem;
+    }
+    .ba-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #4ade80;
+      border: 1px solid rgba(74,222,128,0.25);
+      padding: 0.2rem 0.55rem;
+    }
+
+    /* ── UPLOAD PROMPT ── */
+    .upload-prompt {
+      border: 1px dashed rgba(232,83,10,0.25);
+      background: rgba(232,83,10,0.02);
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .upload-prompt h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .upload-prompt p {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--steel);
+      line-height: 1.7;
+      max-width: 460px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .photo-grid { columns: 2; }
+      .ba-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .photo-grid { columns: 1; }
+      .lb-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero" style="padding-top: var(--nav-h);">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-inner">
+      <div class="page-hero-tag">Workshop & Projects</div>
+      <h1>Our<br><em>Gallery</em></h1>
+    </div>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>›</span>
+      <span>Gallery</span>
+    </div>
+  </div>
+
+  <!-- ═══ PHOTO GALLERY ═══ -->
+  <div style="background: var(--forge);">
+    <div class="container section">
+
+      <div class="reveal">
+        <div class="section-tag">Workshop & Site Photos</div>
+        <h2 class="section-title">Inside <em>Olasco</em></h2>
+        <p class="section-lead">A look inside our 12,000 m² Trans-Amadi fabrication facility — our equipment, our people, and our completed work across Nigeria's oil & gas sector.</p>
+      </div>
+
+      <!-- Filter -->
+      <div class="gal-filter reveal">
+        <button class="filter-btn active" data-gfilter="all">All</button>
+        <button class="filter-btn" data-gfilter="workshop">Workshop</button>
+        <button class="filter-btn" data-gfilter="structural">Structural</button>
+        <button class="filter-btn" data-gfilter="piping">Piping</button>
+        <button class="filter-btn" data-gfilter="vessels">Vessels</button>
+        <button class="filter-btn" data-gfilter="site">Site</button>
+      </div>
+
+      <!-- PHOTO GRID -->
+      <div class="photo-grid reveal" id="photoGrid">
+
+        <!-- 1 — Workshop floor wide -->
+        <div class="photo-item" data-gcat="workshop" data-title="Main Fabrication Bay" data-desc="12,000 m² workshop floor, Trans-Amadi Industrial Layout — overhead crane capacity 50T" onclick="openLightbox(0)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="400" fill="#141820"/>
+              <!-- Workshop floor perspective -->
+              <line x1="0" y1="280" x2="600" y2="280" stroke="#2a2e38" stroke-width="1"/>
+              <!-- Floor tiles -->
+              <g stroke="#1e2228" stroke-width="0.5" fill="none">
+                <line x1="0" y1="320" x2="600" y2="320"/>
+                <line x1="0" y1="360" x2="600" y2="360"/>
+                <line x1="100" y1="280" x2="100" y2="400"/>
+                <line x1="200" y1="280" x2="200" y2="400"/>
+                <line x1="300" y1="280" x2="300" y2="400"/>
+                <line x1="400" y1="280" x2="400" y2="400"/>
+                <line x1="500" y1="280" x2="500" y2="400"/>
+              </g>
+              <!-- Overhead crane beam -->
+              <rect x="0" y="30" width="600" height="18" fill="#1e2430" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+              <rect x="0" y="38" width="600" height="4" fill="#E8530A" fill-opacity="0.12"/>
+              <!-- Crane trolley -->
+              <rect x="220" y="18" width="60" height="28" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <line x1="250" y1="48" x2="250" y2="120" stroke="#8B99A6" stroke-width="0.8" stroke-dasharray="3,2"/>
+              <!-- Hook -->
+              <path d="M244 120 Q244 130 250 130 Q256 130 256 120" fill="none" stroke="#8B99A6" stroke-width="1.2"/>
+              <!-- Steel structure being fabricated -->
+              <g stroke="#E8530A" stroke-width="1.2" fill="none" opacity="0.7">
+                <rect x="80" y="160" width="200" height="120" fill="#1a1e26" stroke-width="0.8"/>
+                <line x1="80" y1="160" x2="180" y2="220"/>
+                <line x1="180" y1="160" x2="80" y2="220"/>
+                <line x1="180" y1="160" x2="280" y2="220"/>
+                <line x1="280" y1="160" x2="180" y2="220"/>
+                <line x1="80" y1="220" x2="280" y2="220"/>
+                <line x1="80" y1="190" x2="280" y2="190"/>
+              </g>
+              <!-- Workers silhouettes -->
+              <g fill="#2a3040">
+                <ellipse cx="120" cy="275" rx="8" ry="5"/>
+                <rect x="115" y="248" width="10" height="28" rx="2"/>
+                <ellipse cx="120" cy="244" rx="7" ry="7"/>
+                <ellipse cx="320" cy="275" rx="8" ry="5"/>
+                <rect x="315" y="248" width="10" height="28" rx="2"/>
+                <ellipse cx="320" cy="244" rx="7" ry="7"/>
+              </g>
+              <!-- Welding spark glow -->
+              <circle cx="175" cy="218" r="10" fill="#E8530A" fill-opacity="0.3"/>
+              <circle cx="175" cy="218" r="4" fill="#F97316" fill-opacity="0.8"/>
+              <!-- Measurement markings on wall -->
+              <g stroke="#2a2e38" stroke-width="0.5">
+                <line x1="570" y1="60" x2="570" y2="280"/>
+                <line x1="560" y1="100" x2="580" y2="100"/>
+                <line x1="560" y1="150" x2="580" y2="150"/>
+                <line x1="560" y1="200" x2="580" y2="200"/>
+                <line x1="560" y1="250" x2="580" y2="250"/>
+              </g>
+              <!-- Roof trusses -->
+              <g stroke="#1e2430" stroke-width="1" fill="none">
+                <path d="M0 0 L100 50 L200 0"/><path d="M200 0 L300 50 L400 0"/><path d="M400 0 L500 50 L600 0"/>
+                <line x1="100" y1="0" x2="100" y2="50"/>
+                <line x1="300" y1="0" x2="300" y2="50"/>
+                <line x1="500" y1="0" x2="500" y2="50"/>
+              </g>
+              <!-- Safety lines painted on floor -->
+              <line x1="50" y1="400" x2="50" y2="280" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.25" stroke-dasharray="12,8"/>
+              <line x1="550" y1="400" x2="550" y2="280" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.25" stroke-dasharray="12,8"/>
+              <!-- Label -->
+              <text x="300" y="390" text-anchor="middle" fill="#E8530A" fill-opacity="0.1" font-size="40" font-family="Barlow Condensed" font-weight="900">WORKSHOP BAY 1</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Workshop</div>
+            <div class="photo-title">Main Fabrication Bay — 12,000 m²</div>
+          </div>
+        </div>
+
+        <!-- 2 — CNC Plasma cutter -->
+        <div class="photo-item" data-gcat="workshop" data-title="CNC Plasma Cutting Table" data-desc="4m × 12m CNC plasma cutting table — carbon steel, stainless, up to 80mm thickness" onclick="openLightbox(1)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="340" fill="#0f1318"/>
+              <!-- Cutting table bed -->
+              <rect x="40" y="100" width="520" height="180" rx="4" fill="#1a1e26" stroke="#2a3040" stroke-width="1"/>
+              <rect x="40" y="100" width="520" height="8" fill="#222834"/>
+              <!-- Grid lines on table -->
+              <g stroke="#1e2430" stroke-width="0.5" fill="none">
+                <line x1="120" y1="108" x2="120" y2="280"/><line x1="200" y1="108" x2="200" y2="280"/>
+                <line x1="280" y1="108" x2="280" y2="280"/><line x1="360" y1="108" x2="360" y2="280"/>
+                <line x1="440" y1="108" x2="440" y2="280"/><line x1="520" y1="108" x2="520" y2="280"/>
+                <line x1="40" y1="150" x2="560" y2="150"/><line x1="40" y1="200" x2="560" y2="200"/><line x1="40" y1="250" x2="560" y2="250"/>
+              </g>
+              <!-- Steel plate being cut -->
+              <rect x="80" y="120" width="380" height="140" fill="#232830" stroke="#3a3f47" stroke-width="0.8"/>
+              <!-- Cut path -->
+              <path d="M100 140 L200 140 L200 200 L300 200 L300 160 L380 160 L380 240 L200 240 L200 200" fill="none" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="6,3"/>
+              <!-- CNC gantry -->
+              <rect x="30" y="80" width="540" height="20" rx="3" fill="#2a3040" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+              <!-- Cutting head -->
+              <rect x="230" y="60" width="30" height="50" rx="2" fill="#343c4e" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.6"/>
+              <!-- Plasma arc -->
+              <path d="M245 110 L242 125 L248 118 L244 133 L250 125 L246 140" fill="none" stroke="#E8530A" stroke-width="1.5" opacity="0.9"/>
+              <circle cx="244" cy="142" r="5" fill="#F97316" fill-opacity="0.8"/>
+              <circle cx="244" cy="142" r="10" fill="#E8530A" fill-opacity="0.2"/>
+              <!-- Sparks -->
+              <g fill="#F97316" opacity="0.7">
+                <circle cx="234" cy="148" r="2"/><circle cx="256" cy="145" r="1.5"/>
+                <circle cx="228" cy="155" r="1"/><circle cx="262" cy="150" r="1.5"/>
+                <circle cx="240" cy="158" r="1"/><circle cx="250" cy="152" r="2"/>
+              </g>
+              <!-- Rail tracks -->
+              <rect x="30" y="98" width="540" height="4" rx="1" fill="#343c4e"/>
+              <!-- Spec labels -->
+              <text x="300" y="320" text-anchor="middle" fill="#E8530A" fill-opacity="0.1" font-size="32" font-family="Barlow Condensed" font-weight="900">CNC PLASMA CUTTER</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Equipment</div>
+            <div class="photo-title">CNC Plasma Cutting Table — 4m × 12m</div>
+          </div>
+        </div>
+
+        <!-- 3 — Pipe spool completed -->
+        <div class="photo-item" data-gcat="piping" data-title="Carbon Steel Pipe Spools" data-desc="12-inch 300# ANSI carbon steel pipe spools, PWHT completed, awaiting hydro-test — NNPC contract" onclick="openLightbox(2)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="420" fill="#0d1015"/>
+              <!-- Pipe rack storage -->
+              <!-- Rack frame -->
+              <g stroke="#2a2e38" stroke-width="1" fill="none">
+                <line x1="60" y1="60" x2="60" y2="360"/>
+                <line x1="540" y1="60" x2="540" y2="360"/>
+                <line x1="60" y1="120" x2="540" y2="120"/>
+                <line x1="60" y1="200" x2="540" y2="200"/>
+                <line x1="60" y1="280" x2="540" y2="280"/>
+                <line x1="60" y1="360" x2="540" y2="360"/>
+              </g>
+              <!-- Row 1 — large bore pipes -->
+              <g>
+                <ellipse cx="130" cy="80" rx="35" ry="35" fill="#1e2430" stroke="#E8530A" stroke-width="1.2" stroke-opacity="0.6"/>
+                <ellipse cx="130" cy="80" rx="22" ry="22" fill="#141820"/>
+                <ellipse cx="130" cy="80" rx="8" ry="8" fill="#1a1e26"/>
+                <rect x="95" y="78" width="460" height="35" fill="#232830" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.3"/>
+                <!-- Flanges on pipe -->
+                <rect x="165" y="72" width="12" height="50" fill="#2a3040" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+                <rect x="280" y="72" width="12" height="50" fill="#2a3040" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+                <rect x="395" y="72" width="12" height="50" fill="#2a3040" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+                <ellipse cx="540" cy="96" rx="35" ry="20" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              </g>
+              <!-- Row 2 — medium bore -->
+              <g>
+                <ellipse cx="110" cy="160" rx="26" ry="26" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+                <ellipse cx="110" cy="160" rx="16" ry="16" fill="#141820"/>
+                <rect x="84" y="146" width="440" height="26" fill="#1e2830" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.25"/>
+                <rect x="130" y="143" width="10" height="38" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <rect x="230" y="143" width="10" height="38" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <rect x="340" y="143" width="10" height="38" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <rect x="450" y="143" width="10" height="38" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <ellipse cx="524" cy="160" rx="26" ry="14" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+              </g>
+              <!-- Row 3 — elbow assemblies -->
+              <g stroke="#E8530A" stroke-width="1.2" fill="none" opacity="0.55">
+                <path d="M80 240 L180 240 Q220 240 220 280 L220 360"/>
+                <path d="M98 240 L180 240 Q210 240 210 280 L210 360"/>
+                <path d="M290 240 L390 240 Q430 240 430 280 L430 360"/>
+                <path d="M308 240 L390 240 Q420 240 420 280 L420 360"/>
+                <rect x="68" y="234" width="14" height="55"/>
+                <rect x="214" y="283" width="55" height="14"/>
+                <rect x="278" y="234" width="14" height="55"/>
+                <rect x="424" y="283" width="55" height="14"/>
+              </g>
+              <!-- Isometric tags hanging off pipes -->
+              <rect x="170" y="60" width="40" height="24" rx="2" fill="#1a2030" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+              <text x="190" y="75" text-anchor="middle" fill="#E8530A" fill-opacity="0.6" font-size="7" font-family="monospace">SP-001</text>
+              <rect x="340" y="60" width="40" height="24" rx="2" fill="#1a2030" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+              <text x="360" y="75" text-anchor="middle" fill="#E8530A" fill-opacity="0.6" font-size="7" font-family="monospace">SP-012</text>
+              <text x="300" y="408" text-anchor="middle" fill="#E8530A" fill-opacity="0.08" font-size="36" font-family="Barlow Condensed" font-weight="900">PIPE SPOOL STORE</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Piping</div>
+            <div class="photo-title">Carbon Steel Pipe Spools — 12" 300# ANSI</div>
+          </div>
+        </div>
+
+        <!-- 4 — Structural steel frame -->
+        <div class="photo-item" data-gcat="structural" data-title="Equipment Support Structure" data-desc="Heavy structural steel equipment support frame — 180T, fabricated for offshore platform, AISC standard" onclick="openLightbox(3)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="480" fill="#0c0f14"/>
+              <!-- Large structural frame -->
+              <g stroke="#E8530A" stroke-width="1.5" fill="none" opacity="0.65">
+                <!-- Primary columns -->
+                <rect x="80" y="80" width="16" height="340" fill="#1e2430" stroke-width="1"/>
+                <rect x="280" y="80" width="16" height="340" fill="#1e2430" stroke-width="1"/>
+                <rect x="500" y="80" width="16" height="340" fill="#1e2430" stroke-width="1"/>
+                <!-- Primary beams horizontal -->
+                <rect x="80" y="80" width="436" height="14" fill="#222830" stroke-width="1"/>
+                <rect x="80" y="230" width="436" height="14" fill="#222830" stroke-width="1"/>
+                <rect x="80" y="400" width="436" height="14" fill="#222830" stroke-width="1"/>
+                <!-- Secondary beams -->
+                <rect x="180" y="80" width="12" height="340" fill="#1e2430" stroke-width="0.8" opacity="0.7"/>
+                <rect x="380" y="80" width="12" height="340" fill="#1e2430" stroke-width="0.8" opacity="0.7"/>
+                <!-- Bracing diagonals -->
+                <line x1="96" y1="94" x2="280" y2="230"/>
+                <line x1="280" y1="94" x2="96" y2="230"/>
+                <line x1="296" y1="94" x2="500" y2="230"/>
+                <line x1="500" y1="94" x2="296" y2="230"/>
+                <line x1="96" y1="244" x2="280" y2="400"/>
+                <line x1="280" y1="244" x2="96" y2="400"/>
+                <line x1="296" y1="244" x2="500" y2="400"/>
+                <line x1="500" y1="244" x2="296" y2="400"/>
+                <!-- Gusset plates -->
+                <rect x="76" y="222" width="28" height="28" fill="#2a3040"/>
+                <rect x="276" y="222" width="28" height="28" fill="#2a3040"/>
+                <rect x="496" y="222" width="28" height="28" fill="#2a3040"/>
+                <rect x="76" y="72" width="28" height="22" fill="#2a3040"/>
+                <rect x="276" y="72" width="28" height="22" fill="#2a3040"/>
+                <rect x="496" y="72" width="28" height="22" fill="#2a3040"/>
+                <!-- Base plates -->
+                <rect x="60" y="414" width="50" height="12" fill="#343c4e" stroke-width="0.8"/>
+                <rect x="264" y="414" width="50" height="12" fill="#343c4e" stroke-width="0.8"/>
+                <rect x="484" y="414" width="50" height="12" fill="#343c4e" stroke-width="0.8"/>
+                <!-- Anchor bolts -->
+                <line x1="70" y1="426" x2="70" y2="440"/><line x1="100" y1="426" x2="100" y2="440"/>
+                <line x1="274" y1="426" x2="274" y2="440"/><line x1="304" y1="426" x2="304" y2="440"/>
+                <line x1="494" y1="426" x2="494" y2="440"/><line x1="524" y1="426" x2="524" y2="440"/>
+              </g>
+              <!-- Weld inspection marks -->
+              <g fill="#E8530A" opacity="0.5">
+                <circle cx="88" cy="230" r="4"/><circle cx="288" cy="230" r="4"/><circle cx="508" cy="230" r="4"/>
+              </g>
+              <!-- Dimension lines -->
+              <g stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.3" fill="none">
+                <line x1="80" y1="455" x2="516" y2="455"/>
+                <line x1="80" y1="448" x2="80" y2="462"/>
+                <line x1="516" y1="448" x2="516" y2="462"/>
+              </g>
+              <text x="298" y="468" text-anchor="middle" fill="#8B99A6" fill-opacity="0.3" font-size="9" font-family="monospace">4360mm</text>
+              <text x="300" y="472" text-anchor="middle" fill="#E8530A" fill-opacity="0.07" font-size="38" font-family="Barlow Condensed" font-weight="900">STRUCTURAL FRAME</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Structural</div>
+            <div class="photo-title">Equipment Support Frame — 180T Offshore</div>
+          </div>
+        </div>
+
+        <!-- 5 — Pressure vessel -->
+        <div class="photo-item" data-gcat="vessels" data-title="Three-Phase Separator" data-desc="3-phase production separator, ASME VIII Div.1, 48-inch × 20ft — Shell SPDC contract" onclick="openLightbox(4)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="380" fill="#0d0f14"/>
+              <!-- Vessel body -->
+              <rect x="100" y="100" width="400" height="160" rx="80" fill="#1a1e28" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.6"/>
+              <!-- Vessel end cap ellipses -->
+              <ellipse cx="100" cy="180" rx="80" ry="80" fill="#1e2430" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.6"/>
+              <ellipse cx="500" cy="180" rx="80" ry="80" fill="#1e2430" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.6"/>
+              <!-- Internal highlight -->
+              <rect x="100" y="108" width="400" height="30" rx="0" fill="#232830" opacity="0.5"/>
+              <!-- Man-way nozzle top -->
+              <rect x="275" y="58" width="50" height="44" rx="25" fill="#1e2430" stroke="#E8530A" stroke-width="1.2" stroke-opacity="0.5"/>
+              <ellipse cx="300" cy="58" rx="25" ry="8" fill="#222830" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <rect x="262" y="54" width="76" height="8" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <!-- Inlet nozzle left -->
+              <rect x="22" y="165" width="80" height="30" rx="15" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <rect x="16" y="163" width="16" height="34" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <!-- Gas outlet top right -->
+              <rect x="450" y="58" width="30" height="46" rx="15" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <rect x="444" y="54" width="52" height="8" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <!-- Liquid outlet bottom -->
+              <rect x="275" y="256" width="50" height="50" rx="25" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <rect x="265" y="300" width="70" height="8" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <!-- Saddle supports -->
+              <path d="M170 260 L140 320 L200 320 Z" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+              <path d="M430 260 L400 320 L460 320 Z" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+              <rect x="120" y="316" width="360" height="8" rx="1" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.3"/>
+              <!-- ASME nameplate -->
+              <rect x="200" y="135" width="80" height="45" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+              <text x="240" y="153" text-anchor="middle" fill="#E8530A" fill-opacity="0.7" font-size="7" font-family="monospace">ASME VIII</text>
+              <text x="240" y="163" text-anchor="middle" fill="#8B99A6" fill-opacity="0.7" font-size="7" font-family="monospace">DIV.1</text>
+              <text x="240" y="173" text-anchor="middle" fill="#8B99A6" fill-opacity="0.5" font-size="6" font-family="monospace">2023</text>
+              <text x="300" y="370" text-anchor="middle" fill="#E8530A" fill-opacity="0.08" font-size="34" font-family="Barlow Condensed" font-weight="900">PRESSURE VESSEL</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Pressure Vessels</div>
+            <div class="photo-title">3-Phase Separator — ASME VIII Div.1</div>
+          </div>
+        </div>
+
+        <!-- 6 — Site installation -->
+        <div class="photo-item" data-gcat="site" data-title="Pipe Rack Installation — Bonny Island" data-desc="Structural pipe rack installation at NLNG Bonny Island facility during Train 7 expansion" onclick="openLightbox(5)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="380" fill="#080c10"/>
+              <!-- Sky gradient area -->
+              <rect width="600" height="200" fill="#0c1018" opacity="0.5"/>
+              <!-- Distant facility skyline -->
+              <g fill="#141820">
+                <rect x="0" y="180" width="50" height="200"/>
+                <rect x="520" y="150" width="80" height="230"/>
+                <rect x="460" y="170" width="60" height="210"/>
+                <rect x="30" y="160" width="40" height="220"/>
+              </g>
+              <!-- Main pipe rack structure -->
+              <g stroke="#E8530A" stroke-width="1.2" fill="none" opacity="0.7">
+                <!-- Columns -->
+                <rect x="100" y="60" width="14" height="280" fill="#1e2430" stroke-width="1"/>
+                <rect x="250" y="60" width="14" height="280" fill="#1e2430" stroke-width="1"/>
+                <rect x="400" y="60" width="14" height="280" fill="#1e2430" stroke-width="1"/>
+                <rect x="550" y="60" width="14" height="280" fill="#1e2430" stroke-width="1"/>
+                <!-- Tier 1 beams -->
+                <rect x="100" y="100" width="464" height="12" fill="#222830" stroke-width="1"/>
+                <line x1="100" y1="106" x2="180" y2="200"/>
+                <line x1="264" y1="106" x2="180" y2="200"/>
+                <line x1="264" y1="106" x2="350" y2="200"/>
+                <line x1="414" y1="106" x2="350" y2="200"/>
+                <!-- Tier 2 beams -->
+                <rect x="100" y="200" width="464" height="12" fill="#222830" stroke-width="1"/>
+                <!-- Pipes sitting on rack - top tier -->
+                <rect x="100" y="86" width="464" height="14" fill="#2a3040" rx="7"/>
+                <rect x="100" y="80" width="464" height="8" fill="#343c4e" rx="4"/>
+                <!-- Pipes on tier 2 -->
+                <rect x="100" y="186" width="464" height="14" fill="#2a3040" rx="7"/>
+                <rect x="100" y="180" width="464" height="8" fill="#343c4e" rx="4"/>
+                <!-- Small bore bundle -->
+                <g opacity="0.6">
+                  <rect x="100" y="172" width="464" height="6" fill="#232830" rx="3"/>
+                  <rect x="100" y="166" width="464" height="5" fill="#1e2830" rx="2.5"/>
+                </g>
+              </g>
+              <!-- Crane in background -->
+              <g stroke="#2a3040" stroke-width="1.5" fill="none">
+                <line x1="560" y1="320" x2="560" y2="20"/>
+                <line x1="560" y1="20" x2="460" y2="80"/>
+                <line x1="560" y1="20" x2="590" y2="60"/>
+                <line x1="480" y1="72" x2="480" y2="130" stroke-dasharray="3,3"/>
+              </g>
+              <!-- Ground workers -->
+              <g fill="#1e2430" opacity="0.8">
+                <ellipse cx="180" cy="340" rx="9" ry="6"/>
+                <rect x="174" y="318" width="12" height="24" rx="2"/>
+                <ellipse cx="180" cy="314" rx="8" ry="8"/>
+                <ellipse cx="350" cy="340" rx="9" ry="6"/>
+                <rect x="344" y="318" width="12" height="24" rx="2"/>
+                <ellipse cx="350" cy="314" rx="8" ry="8"/>
+              </g>
+              <!-- Hard hat highlights -->
+              <circle cx="180" cy="313" r="6" fill="none" stroke="#E8530A" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="350" cy="313" r="6" fill="none" stroke="#E8530A" stroke-width="1" stroke-opacity="0.4"/>
+              <text x="300" y="370" text-anchor="middle" fill="#E8530A" fill-opacity="0.08" font-size="32" font-family="Barlow Condensed" font-weight="900">NLNG BONNY ISLAND</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Site Installation</div>
+            <div class="photo-title">Pipe Rack Installation — Bonny Island</div>
+          </div>
+        </div>
+
+        <!-- 7 — Welding bay -->
+        <div class="photo-item" data-gcat="workshop" data-title="Sub-Arc Welding Bay" data-desc="Sub-arc and TIG welding bay — qualified weld procedures on file for CS, SS, Duplex, and alloy steels" onclick="openLightbox(6)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="360" fill="#0a0c10"/>
+              <!-- Positioner/rotator -->
+              <ellipse cx="300" cy="240" rx="100" ry="20" fill="#1e2430" stroke="#2a3040" stroke-width="1"/>
+              <rect x="200" y="180" width="200" height="60" rx="4" fill="#1a1e26" stroke="#2a3040" stroke-width="1"/>
+              <ellipse cx="300" cy="180" rx="100" ry="18" fill="#222830" stroke="#2a3040" stroke-width="1"/>
+              <!-- Pipe being welded on positioner -->
+              <rect x="120" y="200" width="360" height="50" rx="25" fill="#1e2830" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <ellipse cx="120" cy="225" rx="25" ry="25" fill="#1a2030" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <ellipse cx="480" cy="225" rx="25" ry="25" fill="#1a2030" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <!-- Weld seam line -->
+              <line x1="145" y1="225" x2="455" y2="225" stroke="#E8530A" stroke-width="2" stroke-opacity="0.7" stroke-dasharray="4,2"/>
+              <!-- Weld pool glow at seam -->
+              <circle cx="300" cy="225" r="20" fill="#E8530A" fill-opacity="0.25"/>
+              <circle cx="300" cy="225" r="8" fill="#F97316" fill-opacity="0.7"/>
+              <!-- Arc spray -->
+              <g fill="#F97316" opacity="0.8">
+                <circle cx="285" cy="215" r="2"/><circle cx="293" cy="210" r="1.5"/>
+                <circle cx="307" cy="211" r="2"/><circle cx="315" cy="218" r="1.5"/>
+                <circle cx="278" cy="220" r="1"/><circle cx="322" cy="222" r="1"/>
+                <circle cx="291" cy="206" r="1"/><circle cx="309" cy="208" r="1.5"/>
+              </g>
+              <!-- Welding gun / torch arm -->
+              <path d="M360 120 L320 190 L305 220" fill="none" stroke="#3a4050" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="360" cy="118" r="8" fill="#343c4e" stroke="#2a3040"/>
+              <!-- Sub-arc flux hopper -->
+              <path d="M340 80 L380 80 L370 130 L350 130 Z" fill="#2a3040" stroke="#343c4e" stroke-width="1"/>
+              <path d="M355 130 L360 160 L365 130" fill="#E8530A" fill-opacity="0.4"/>
+              <!-- Protective shield -->
+              <path d="M250 180 Q300 150 350 180" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.2" stroke-dasharray="4,3"/>
+              <!-- Electrode/wire reel -->
+              <circle cx="450" cy="100" r="30" fill="#1a1e26" stroke="#2a3040" stroke-width="1"/>
+              <circle cx="450" cy="100" r="18" fill="#141820"/>
+              <circle cx="450" cy="100" r="6" fill="#2a3040"/>
+              <line x1="440" y1="130" x2="350" y2="190" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.4"/>
+              <!-- WPS sign on wall -->
+              <rect x="30" y="50" width="80" height="50" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+              <text x="70" y="68" text-anchor="middle" fill="#E8530A" fill-opacity="0.6" font-size="7" font-family="monospace">WPS-CS-01</text>
+              <text x="70" y="78" text-anchor="middle" fill="#8B99A6" fill-opacity="0.5" font-size="6" font-family="monospace">SMAW/GTAW</text>
+              <text x="70" y="88" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="6" font-family="monospace">A106 GR.B</text>
+              <text x="300" y="352" text-anchor="middle" fill="#E8530A" fill-opacity="0.07" font-size="34" font-family="Barlow Condensed" font-weight="900">WELDING BAY</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Workshop</div>
+            <div class="photo-title">Sub-Arc Welding Bay — WPS Qualified</div>
+          </div>
+        </div>
+
+        <!-- 8 — NDT inspection -->
+        <div class="photo-item" data-gcat="workshop" data-title="NDT Inspection Lab" data-desc="RT and UT inspection of fabricated pipe welds — Level II/III certified NDT technicians on site" onclick="openLightbox(7)">
+          <div class="photo-inner">
+            <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="340" fill="#0a0c10"/>
+              <!-- Inspection bench -->
+              <rect x="60" y="200" width="480" height="20" rx="2" fill="#1e2430" stroke="#2a3040" stroke-width="1"/>
+              <rect x="60" y="200" width="480" height="4" fill="#222830"/>
+              <!-- Pipe on bench -->
+              <rect x="100" y="160" width="360" height="40" rx="20" fill="#1a1e28" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <ellipse cx="100" cy="180" rx="20" ry="20" fill="#181c24" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <ellipse cx="460" cy="180" rx="20" ry="20" fill="#181c24" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+              <!-- Weld seam marker -->
+              <line x1="280" y1="158" x2="280" y2="202" stroke="#F97316" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="3,2"/>
+              <!-- UT probe on pipe -->
+              <rect x="260" y="148" width="40" height="20" rx="3" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.6"/>
+              <rect x="274" y="136" width="12" height="14" rx="2" fill="#343c4e" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+              <!-- Couplant gel effect -->
+              <ellipse cx="280" cy="162" rx="16" ry="6" fill="#1a3050" fill-opacity="0.4"/>
+              <!-- UT machine display -->
+              <rect x="380" y="100" width="160" height="100" rx="4" fill="#0d1520" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+              <rect x="388" y="108" width="144" height="60" rx="2" fill="#050d18"/>
+              <!-- A-scan waveform -->
+              <polyline points="392,138 404,138 414,100 424,175 434,138 454,138 464,112 474,165 484,138 524,138" fill="none" stroke="#E8530A" stroke-width="1.2" opacity="0.9"/>
+              <line x1="392" y1="138" x2="532" y2="138" stroke="#1e3050" stroke-width="0.5" stroke-dasharray="3,3"/>
+              <!-- Defect indication line -->
+              <line x1="464" y1="105" x2="464" y2="170" stroke="#F97316" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="2,2"/>
+              <text x="466" y="110" fill="#F97316" fill-opacity="0.7" font-size="7" font-family="monospace">IND</text>
+              <!-- Cable from probe to machine -->
+              <path d="M292 152 Q340 90 380 140" fill="none" stroke="#3a4050" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <!-- Bench legs -->
+              <rect x="80" y="220" width="10" height="60" fill="#1a1e26"/>
+              <rect x="510" y="220" width="10" height="60" fill="#1a1e26"/>
+              <!-- Report clipboard -->
+              <rect x="80" y="100" width="70" height="90" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+              <rect x="95" y="86" width="40" height="16" rx="3" fill="#1e2430" stroke="#2a3040"/>
+              <g stroke="#E8530A" stroke-width="0.4" stroke-opacity="0.35">
+                <line x1="88" y1="118" x2="142" y2="118"/>
+                <line x1="88" y1="126" x2="142" y2="126"/>
+                <line x1="88" y1="134" x2="130" y2="134"/>
+                <line x1="88" y1="142" x2="142" y2="142"/>
+                <line x1="88" y1="150" x2="120" y2="150"/>
+                <line x1="88" y1="158" x2="142" y2="158"/>
+                <line x1="88" y1="166" x2="110" y2="166"/>
+              </g>
+              <text x="300" y="330" text-anchor="middle" fill="#E8530A" fill-opacity="0.08" font-size="30" font-family="Barlow Condensed" font-weight="900">NDT INSPECTION</text>
+            </svg>
+          </div>
+          <div class="photo-cap">
+            <div class="photo-cat">Quality Control</div>
+            <div class="photo-title">Ultrasonic Testing — Pipe Weld Inspection</div>
+          </div>
+        </div>
+
+      </div><!-- /photo-grid -->
+
+      <!-- UPLOAD PROMPT -->
+      <div class="upload-prompt reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px;stroke:rgba(232,83,10,0.4);margin:0 auto 1rem;display:block;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <h3>Add Your Own Photos</h3>
+        <p>Replace the placeholder illustrations above with real photos from your workshop and completed projects. Simply swap the <code style="background:rgba(232,83,10,0.1);color:var(--ember);padding:0.1rem 0.4rem;font-size:0.8rem;">&lt;svg&gt;</code> blocks with <code style="background:rgba(232,83,10,0.1);color:var(--ember);padding:0.1rem 0.4rem;font-size:0.8rem;">&lt;img src="photos/your-photo.jpg"&gt;</code> inside each <code style="background:rgba(232,83,10,0.1);color:var(--ember);padding:0.1rem 0.4rem;font-size:0.8rem;">.photo-inner</code> div.</p>
+        <a href="contact.html" class="btn btn-outline" style="font-size:0.8rem;">Send Us Your Photos →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ BEFORE / AFTER ═══ -->
+  <div style="background: var(--iron); border-top: 1px solid rgba(232,83,10,0.1);">
+    <div class="container section">
+      <div class="reveal">
+        <div class="section-tag">Engineering to Reality</div>
+        <h2 class="section-title">Drawing <em>vs</em> Finished</h2>
+        <p class="section-lead">From engineering isometric and GA drawings through to completed, inspected, and painted fabrications ready for site.</p>
+      </div>
+
+      <div class="ba-grid reveal">
+
+        <!-- B/A 1 — Pipe spool -->
+        <div class="ba-card">
+          <div class="ba-header">
+            <div class="ba-tab drawing">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Isometric Drawing
+            </div>
+            <div class="ba-tab finished">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Completed Spool
+            </div>
+          </div>
+          <div class="ba-panels">
+            <!-- DRAWING panel -->
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0f1318"/>
+                <!-- Drawing border -->
+                <rect x="8" y="8" width="284" height="244" fill="none" stroke="#2a3040" stroke-width="0.8"/>
+                <rect x="12" y="12" width="276" height="204" fill="none" stroke="#2a3040" stroke-width="0.4"/>
+                <!-- Title block -->
+                <rect x="8" y="216" width="284" height="36" fill="#141820" stroke="#2a3040" stroke-width="0.5"/>
+                <text x="60" y="228" fill="#8B99A6" fill-opacity="0.6" font-size="6" font-family="monospace">DWG NO: SP-NL7-0142</text>
+                <text x="60" y="237" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">PIPE SPOOL ISOMETRIC</text>
+                <text x="60" y="246" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">OLASCO ENG. © 2023</text>
+                <!-- Isometric pipe drawing -->
+                <g stroke="#8B99A6" stroke-width="1.2" fill="none" stroke-opacity="0.7">
+                  <!-- Main run -->
+                  <line x1="40" y1="160" x2="160" y2="160"/>
+                  <!-- Elbow up -->
+                  <path d="M160 160 Q180 160 180 140"/>
+                  <!-- Vertical rise -->
+                  <line x1="180" y1="140" x2="180" y2="60"/>
+                  <!-- Elbow right at top -->
+                  <path d="M180 60 Q180 40 200 40"/>
+                  <!-- Final horizontal -->
+                  <line x1="200" y1="40" x2="260" y2="40"/>
+                </g>
+                <!-- Flanges on drawing -->
+                <g stroke="#E8530A" stroke-width="1.2" stroke-opacity="0.7" fill="none">
+                  <line x1="38" y1="152" x2="38" y2="168"/>
+                  <line x1="258" y1="32" x2="258" y2="48"/>
+                </g>
+                <!-- Dimension lines -->
+                <g stroke="#8B99A6" stroke-width="0.4" stroke-opacity="0.4" fill="none">
+                  <line x1="40" y1="175" x2="160" y2="175"/>
+                  <line x1="40" y1="170" x2="40" y2="180"/>
+                  <line x1="160" y1="170" x2="160" y2="180"/>
+                  <line x1="195" y1="60" x2="195" y2="140"/>
+                  <line x1="190" y1="60" x2="200" y2="60"/>
+                  <line x1="190" y1="140" x2="200" y2="140"/>
+                </g>
+                <text x="100" y="186" text-anchor="middle" fill="#8B99A6" fill-opacity="0.5" font-size="7" font-family="monospace">1,200mm</text>
+                <text x="210" y="102" text-anchor="middle" fill="#8B99A6" fill-opacity="0.5" font-size="7" font-family="monospace" transform="rotate(-90 210 102)">800mm</text>
+                <!-- North arrow -->
+                <g stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.4" fill="none">
+                  <line x1="248" y1="185" x2="248" y2="170"/>
+                  <path d="M244 174 L248 168 L252 174"/>
+                </g>
+                <text x="248" y="195" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="6" font-family="monospace">N</text>
+                <!-- Weld symbols on drawing -->
+                <text x="100" y="155" fill="#E8530A" fill-opacity="0.5" font-size="8" font-family="monospace">⌀</text>
+                <text x="185" y="108" fill="#E8530A" fill-opacity="0.5" font-size="8" font-family="monospace">⌀</text>
+              </svg>
+            </div>
+            <!-- FINISHED panel -->
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0d1015"/>
+                <!-- Completed pipe spool 3D-ish view -->
+                <g stroke="#E8530A" stroke-opacity="0.6" fill="none">
+                  <!-- Main horizontal pipe -->
+                  <rect x="30" y="148" width="130" height="22" rx="11" fill="#1e2830" stroke-width="1.2"/>
+                  <ellipse cx="30" cy="159" rx="11" ry="11" fill="#1a2428" stroke-width="1.2"/>
+                  <!-- Left flange -->
+                  <rect x="22" y="144" width="12" height="30" rx="2" fill="#2a3040" stroke-width="1"/>
+                  <!-- Elbow -->
+                  <path d="M160 148 Q185 148 185 125" fill="#1e2830" stroke-width="1.2"/>
+                  <path d="M160 170 Q196 170 196 125" fill="#1e2830" stroke-width="1"/>
+                  <!-- Vertical riser -->
+                  <rect x="178" y="55" width="22" height="72" rx="11" fill="#1e2830" stroke-width="1.2"/>
+                  <ellipse cx="189" cy="55" rx="11" ry="4" fill="#1a2428" stroke-width="1"/>
+                  <!-- Top elbow -->
+                  <path d="M178 55 Q178 36 200 36" fill="#1e2830" stroke-width="1.2"/>
+                  <path d="M200 55 Q210 36 230 36" fill="#1e2830" stroke-width="1"/>
+                  <!-- Top horizontal -->
+                  <rect x="200" y="30" width="70" height="22" rx="11" fill="#1e2830" stroke-width="1.2"/>
+                  <!-- Right flange -->
+                  <rect x="264" y="26" width="12" height="30" rx="2" fill="#2a3040" stroke-width="1"/>
+                  <!-- Bolt holes on flanges -->
+                  <circle cx="24" cy="152" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                  <circle cx="24" cy="166" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                  <circle cx="268" cy="34" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                  <circle cx="268" cy="48" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                </g>
+                <!-- Paint coat — yellow primer visible -->
+                <rect x="30" y="150" width="128" height="18" rx="9" fill="#2a3020" fill-opacity="0.5"/>
+                <!-- Spool tag -->
+                <rect x="80" y="130" width="38" height="18" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.5"/>
+                <text x="99" y="142" text-anchor="middle" fill="#E8530A" fill-opacity="0.7" font-size="6" font-family="monospace">SP-0142</text>
+                <!-- Inspection stamp -->
+                <circle cx="250" cy="180" r="18" fill="none" stroke="#4ade80" stroke-width="1" stroke-opacity="0.4"/>
+                <text x="250" y="176" text-anchor="middle" fill="#4ade80" fill-opacity="0.5" font-size="6" font-family="monospace">QC</text>
+                <text x="250" y="184" text-anchor="middle" fill="#4ade80" fill-opacity="0.4" font-size="5" font-family="monospace">PASS</text>
+              </svg>
+            </div>
+          </div>
+          <div class="ba-footer">
+            <div>
+              <div class="ba-title">12" CS Pipe Spool — SP-NL7-0142</div>
+              <div class="ba-spec">A106 Gr.B · 300# ANSI · PWHT Completed · Hydro-Tested</div>
+            </div>
+            <span class="ba-badge">Delivered</span>
+          </div>
+        </div>
+
+        <!-- B/A 2 — Structural frame -->
+        <div class="ba-card">
+          <div class="ba-header">
+            <div class="ba-tab drawing">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              GA Drawing
+            </div>
+            <div class="ba-tab finished">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Completed Frame
+            </div>
+          </div>
+          <div class="ba-panels">
+            <!-- GA Drawing -->
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0f1318"/>
+                <rect x="8" y="8" width="284" height="244" fill="none" stroke="#2a3040" stroke-width="0.8"/>
+                <rect x="12" y="12" width="276" height="204" fill="none" stroke="#2a3040" stroke-width="0.4"/>
+                <rect x="8" y="216" width="284" height="36" fill="#141820" stroke="#2a3040" stroke-width="0.5"/>
+                <text x="60" y="228" fill="#8B99A6" fill-opacity="0.6" font-size="6" font-family="monospace">DWG NO: STR-OML-088</text>
+                <text x="60" y="237" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">EQUIPMENT SUPPORT — GA</text>
+                <text x="60" y="246" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">OLASCO ENG. © 2023</text>
+                <!-- Front elevation GA drawing -->
+                <g stroke="#8B99A6" stroke-width="1" fill="none" stroke-opacity="0.6">
+                  <!-- Columns -->
+                  <rect x="40" y="40" width="8" height="160" fill="none"/>
+                  <rect x="146" y="40" width="8" height="160" fill="none"/>
+                  <rect x="252" y="40" width="8" height="160" fill="none"/>
+                  <!-- Beams -->
+                  <line x1="40" y1="48" x2="260" y2="48"/>
+                  <line x1="40" y1="120" x2="260" y2="120"/>
+                  <line x1="40" y1="200" x2="260" y2="200"/>
+                  <!-- Bracing -->
+                  <line x1="48" y1="48" x2="146" y2="120" stroke-opacity="0.4"/>
+                  <line x1="146" y1="48" x2="48" y2="120" stroke-opacity="0.4"/>
+                  <line x1="154" y1="48" x2="252" y2="120" stroke-opacity="0.4"/>
+                  <line x1="252" y1="48" x2="154" y2="120" stroke-opacity="0.4"/>
+                  <line x1="48" y1="120" x2="146" y2="200" stroke-opacity="0.4"/>
+                  <line x1="146" y1="120" x2="48" y2="200" stroke-opacity="0.4"/>
+                  <!-- Base plates -->
+                  <rect x="28" y="196" width="32" height="6" fill="#1e2430"/>
+                  <rect x="134" y="196" width="32" height="6" fill="#1e2430"/>
+                  <rect x="240" y="196" width="32" height="6" fill="#1e2430"/>
+                </g>
+                <!-- Hidden lines -->
+                <g stroke="#8B99A6" stroke-width="0.5" stroke-dasharray="3,2" stroke-opacity="0.3" fill="none">
+                  <line x1="154" y1="120" x2="252" y2="200"/>
+                  <line x1="252" y1="120" x2="154" y2="200"/>
+                </g>
+                <!-- Dimension -->
+                <g stroke="#8B99A6" stroke-width="0.4" stroke-opacity="0.35" fill="none">
+                  <line x1="40" y1="210" x2="260" y2="210"/>
+                  <line x1="40" y1="206" x2="40" y2="214"/>
+                  <line x1="260" y1="206" x2="260" y2="214"/>
+                </g>
+                <text x="150" y="208" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="7" font-family="monospace">4,360mm</text>
+                <!-- Section marks -->
+                <text x="16" y="84" fill="#E8530A" fill-opacity="0.5" font-size="7" font-family="monospace">A</text>
+                <text x="16" y="162" fill="#E8530A" fill-opacity="0.5" font-size="7" font-family="monospace">B</text>
+              </svg>
+            </div>
+            <!-- Finished structural -->
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0c0f14"/>
+                <g stroke="#E8530A" stroke-width="1.4" fill="none" opacity="0.65">
+                  <!-- Primary columns -->
+                  <rect x="38" y="30" width="10" height="170" fill="#1e2430" stroke-width="1"/>
+                  <rect x="145" y="30" width="10" height="170" fill="#1e2430" stroke-width="1"/>
+                  <rect x="252" y="30" width="10" height="170" fill="#1e2430" stroke-width="1"/>
+                  <!-- Primary beams -->
+                  <rect x="38" y="30" width="224" height="8" fill="#222830" stroke-width="0.8"/>
+                  <rect x="38" y="115" width="224" height="8" fill="#222830" stroke-width="0.8"/>
+                  <rect x="38" y="192" width="224" height="8" fill="#222830" stroke-width="0.8"/>
+                  <!-- Bracing -->
+                  <line x1="48" y1="38" x2="145" y2="115"/>
+                  <line x1="145" y1="38" x2="48" y2="115"/>
+                  <line x1="155" y1="38" x2="252" y2="115"/>
+                  <line x1="252" y1="38" x2="155" y2="115"/>
+                  <line x1="48" y1="123" x2="145" y2="192"/>
+                  <line x1="145" y1="123" x2="48" y2="192"/>
+                  <!-- Gusset plates -->
+                  <rect x="34" y="109" width="18" height="14" fill="#2a3040" stroke-width="0.8"/>
+                  <rect x="141" y="109" width="18" height="14" fill="#2a3040" stroke-width="0.8"/>
+                  <rect x="248" y="109" width="18" height="14" fill="#2a3040" stroke-width="0.8"/>
+                  <!-- Base plates with bolts -->
+                  <rect x="24" y="196" width="34" height="8" fill="#343c4e" stroke-width="0.8"/>
+                  <rect x="131" y="196" width="34" height="8" fill="#343c4e" stroke-width="0.8"/>
+                  <rect x="238" y="196" width="34" height="8" fill="#343c4e" stroke-width="0.8"/>
+                  <circle cx="30" cy="200" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                  <circle cx="52" cy="200" r="2" fill="none" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.5"/>
+                </g>
+                <!-- Paint — red oxide primer -->
+                <rect x="38" y="32" width="8" height="165" fill="#3a1a10" fill-opacity="0.4"/>
+                <rect x="38" y="32" width="222" height="6" fill="#3a1a10" fill-opacity="0.3"/>
+                <!-- QC weld stamps -->
+                <g fill="#E8530A" opacity="0.5">
+                  <circle cx="43" cy="115" r="3"/><circle cx="150" cy="115" r="3"/><circle cx="257" cy="115" r="3"/>
+                </g>
+                <!-- Inspection pass tag -->
+                <rect x="200" y="210" width="50" height="28" rx="2" fill="#141820" stroke="#4ade80" stroke-width="0.6" stroke-opacity="0.5"/>
+                <text x="225" y="222" text-anchor="middle" fill="#4ade80" fill-opacity="0.6" font-size="6" font-family="monospace">QC PASS</text>
+                <text x="225" y="232" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">STR-OML-088</text>
+              </svg>
+            </div>
+          </div>
+          <div class="ba-footer">
+            <div>
+              <div class="ba-title">Structural Equipment Support — STR-OML-088</div>
+              <div class="ba-spec">A572 Gr.50 · AISC · AWS D1.1 · 2-Coat Paint System</div>
+            </div>
+            <span class="ba-badge">Delivered</span>
+          </div>
+        </div>
+
+        <!-- B/A 3 — Pressure vessel -->
+        <div class="ba-card">
+          <div class="ba-header">
+            <div class="ba-tab drawing">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Vessel GA Drawing
+            </div>
+            <div class="ba-tab finished">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Completed Vessel
+            </div>
+          </div>
+          <div class="ba-panels">
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0f1318"/>
+                <rect x="8" y="8" width="284" height="244" fill="none" stroke="#2a3040" stroke-width="0.8"/>
+                <rect x="8" y="216" width="284" height="36" fill="#141820" stroke="#2a3040" stroke-width="0.5"/>
+                <text x="60" y="228" fill="#8B99A6" fill-opacity="0.6" font-size="6" font-family="monospace">DWG NO: V-SPDC-003</text>
+                <text x="60" y="237" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">SEPARATOR — ASME VIII DIV.1</text>
+                <text x="60" y="246" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">OLASCO ENG. © 2023</text>
+                <!-- Vessel outline -->
+                <rect x="50" y="80" width="200" height="100" rx="50" fill="none" stroke="#8B99A6" stroke-width="1.2" stroke-opacity="0.6"/>
+                <!-- End caps hidden lines -->
+                <ellipse cx="50" cy="130" rx="50" ry="50" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,2"/>
+                <ellipse cx="250" cy="130" rx="50" ry="50" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,2"/>
+                <!-- Nozzle outline top -->
+                <rect x="128" y="46" width="20" height="36" rx="10" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.6"/>
+                <line x1="122" y1="46" x2="156" y2="46" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.5"/>
+                <!-- Nozzle bottom -->
+                <rect x="128" y="178" width="20" height="30" rx="10" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.6"/>
+                <line x1="122" y1="206" x2="156" y2="206" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.5"/>
+                <!-- Nozzle tags -->
+                <text x="162" y="58" fill="#E8530A" fill-opacity="0.5" font-size="7" font-family="monospace">N1-MH</text>
+                <text x="162" y="200" fill="#E8530A" fill-opacity="0.5" font-size="7" font-family="monospace">N2-LO</text>
+                <!-- Saddles -->
+                <path d="M80 180 L60 205 L100 205 Z" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.5"/>
+                <path d="M220 180 L200 205 L240 205 Z" fill="none" stroke="#8B99A6" stroke-width="0.8" stroke-opacity="0.5"/>
+                <!-- ASME stamp block -->
+                <rect x="14" y="20" width="60" height="40" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <text x="44" y="33" text-anchor="middle" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">MAWP: 50BAR</text>
+                <text x="44" y="43" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">TEMP: -20/120°C</text>
+                <text x="44" y="53" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">VOL: 12.5 M³</text>
+              </svg>
+            </div>
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0c0f14"/>
+                <!-- Completed vessel -->
+                <rect x="50" y="80" width="200" height="100" rx="50" fill="#1a1e28" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.55"/>
+                <ellipse cx="50" cy="130" rx="50" ry="50" fill="#1e2430" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.55"/>
+                <ellipse cx="250" cy="130" rx="50" ry="50" fill="#1e2430" stroke="#E8530A" stroke-width="1.5" stroke-opacity="0.55"/>
+                <!-- Surface highlight -->
+                <rect x="50" y="85" width="200" height="25" rx="0" fill="#232830" fill-opacity="0.4"/>
+                <!-- Man-way nozzle -->
+                <rect x="130" y="50" width="20" height="32" rx="10" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+                <rect x="124" y="48" width="32" height="6" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <!-- Liquid nozzle -->
+                <rect x="130" y="178" width="20" height="28" rx="10" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+                <rect x="124" y="200" width="32" height="6" rx="2" fill="#2a3040" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <!-- Saddle supports -->
+                <path d="M82 180 L62 208 L102 208 Z" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <path d="M218 180 L198 208 L238 208 Z" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <rect x="50" y="205" width="200" height="6" rx="1" fill="#2a3040"/>
+                <!-- ASME nameplate on vessel -->
+                <rect x="112" y="110" width="60" height="36" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.5"/>
+                <text x="142" y="122" text-anchor="middle" fill="#E8530A" fill-opacity="0.6" font-size="6" font-family="monospace">ASME VIII</text>
+                <text x="142" y="131" text-anchor="middle" fill="#8B99A6" fill-opacity="0.5" font-size="6" font-family="monospace">MAWP 50BAR</text>
+                <text x="142" y="140" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">V-SPDC-003</text>
+                <!-- QC pass tag -->
+                <circle cx="248" cy="185" r="16" fill="none" stroke="#4ade80" stroke-width="0.8" stroke-opacity="0.4"/>
+                <text x="248" y="182" text-anchor="middle" fill="#4ade80" fill-opacity="0.5" font-size="6" font-family="monospace">NDT</text>
+                <text x="248" y="191" text-anchor="middle" fill="#4ade80" fill-opacity="0.4" font-size="5" font-family="monospace">PASS</text>
+              </svg>
+            </div>
+          </div>
+          <div class="ba-footer">
+            <div>
+              <div class="ba-title">Production Separator — V-SPDC-003</div>
+              <div class="ba-spec">SA-516 Gr.70 · ASME VIII Div.1 · Hydro-Tested · SPDC Approved</div>
+            </div>
+            <span class="ba-badge">Delivered</span>
+          </div>
+        </div>
+
+        <!-- B/A 4 — Skid module -->
+        <div class="ba-card">
+          <div class="ba-header">
+            <div class="ba-tab drawing">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              3D Model / Drawing
+            </div>
+            <div class="ba-tab finished">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Completed Skid
+            </div>
+          </div>
+          <div class="ba-panels">
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0f1318"/>
+                <rect x="8" y="8" width="284" height="244" fill="none" stroke="#2a3040" stroke-width="0.8"/>
+                <rect x="8" y="216" width="284" height="36" fill="#141820" stroke="#2a3040" stroke-width="0.5"/>
+                <text x="60" y="228" fill="#8B99A6" fill-opacity="0.6" font-size="6" font-family="monospace">MODEL: SKD-SEP-014</text>
+                <text x="60" y="237" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">WELLHEAD PRODUCTION SKID</text>
+                <text x="60" y="246" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">OLASCO ENG. © 2023</text>
+                <!-- Isometric skid 3D model lines -->
+                <g stroke="#8B99A6" stroke-width="0.8" fill="none" stroke-opacity="0.55">
+                  <!-- Base skid isometric -->
+                  <path d="M40 170 L150 130 L260 170 L260 190 L150 150 L40 190 Z" fill="#141a22"/>
+                  <!-- Left face -->
+                  <path d="M40 170 L40 190 L150 150 L150 130 Z" fill="#181e28"/>
+                  <!-- Equipment box on skid -->
+                  <path d="M80 130 L80 110 L160 82 L220 110 L220 130 L160 102 Z" fill="#141a22"/>
+                  <path d="M80 110 L80 130 L160 102 Z" fill="#181e28" opacity="0.8"/>
+                  <!-- Vessel on skid -->
+                  <path d="M90 102 Q120 90 150 102 L150 130 Q120 118 90 130 Z" fill="#1e2430"/>
+                  <!-- Pipe connections isometric -->
+                  <line x1="150" y1="96" x2="150" y2="72"/>
+                  <line x1="142" y1="72" x2="158" y2="72"/>
+                  <line x1="150" y1="72" x2="200" y2="60"/>
+                  <!-- Dimension arrows in 3D view -->
+                  <line x1="40" y1="200" x2="260" y2="200" stroke-opacity="0.3"/>
+                  <line x1="40" y1="196" x2="40" y2="204" stroke-opacity="0.3"/>
+                  <line x1="260" y1="196" x2="260" y2="204" stroke-opacity="0.3"/>
+                </g>
+                <text x="150" y="212" text-anchor="middle" fill="#8B99A6" fill-opacity="0.35" font-size="7" font-family="monospace">3,000mm</text>
+                <!-- AVEVA E3D badge -->
+                <rect x="220" y="20" width="62" height="22" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <text x="251" y="30" text-anchor="middle" fill="#E8530A" fill-opacity="0.5" font-size="6" font-family="monospace">AVEVA E3D</text>
+                <text x="251" y="38" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">3D MODEL</text>
+              </svg>
+            </div>
+            <div class="ba-panel">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="260" fill="#0c0f14"/>
+                <!-- Completed skid fabrication -->
+                <!-- Base frame -->
+                <rect x="30" y="180" width="240" height="14" rx="2" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+                <rect x="30" y="165" width="12" height="30" fill="#1e2430" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <rect x="130" y="165" width="12" height="30" fill="#1e2430" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <rect x="258" y="165" width="12" height="30" fill="#1e2430" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <rect x="30" y="155" width="240" height="10" rx="1" fill="#222830" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <!-- Separator vessel on skid -->
+                <rect x="60" y="90" width="120" height="70" rx="35" fill="#1a1e28" stroke="#E8530A" stroke-width="1.2" stroke-opacity="0.5"/>
+                <ellipse cx="60" cy="125" rx="35" ry="35" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+                <ellipse cx="180" cy="125" rx="35" ry="35" fill="#1e2430" stroke="#E8530A" stroke-width="1" stroke-opacity="0.5"/>
+                <!-- Vessel nozzles -->
+                <rect x="108" y="62" width="14" height="30" rx="7" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+                <rect x="102" y="60" width="26" height="5" rx="1" fill="#2a3040" stroke="#E8530A" stroke-width="0.5" stroke-opacity="0.4"/>
+                <!-- Pump on skid -->
+                <rect x="210" y="112" width="44" height="42" rx="3" fill="#1e2430" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.5"/>
+                <circle cx="232" cy="133" r="14" fill="#141820" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <circle cx="232" cy="133" r="6" fill="#1a1e26"/>
+                <!-- Connecting pipe -->
+                <rect x="185" y="122" width="30" height="8" rx="4" fill="#1e2830" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <!-- Instrument panel -->
+                <rect x="218" y="80" width="36" height="30" rx="2" fill="#141820" stroke="#E8530A" stroke-width="0.6" stroke-opacity="0.4"/>
+                <circle cx="230" cy="92" r="5" fill="none" stroke="#4ade80" stroke-width="0.8" stroke-opacity="0.5"/>
+                <circle cx="244" cy="92" r="5" fill="none" stroke="#E8530A" stroke-width="0.8" stroke-opacity="0.4"/>
+                <line x1="222" y1="102" x2="252" y2="102" stroke="#8B99A6" stroke-width="0.5" stroke-opacity="0.3"/>
+                <!-- FAT tag -->
+                <rect x="40" y="215" width="50" height="20" rx="2" fill="#141820" stroke="#4ade80" stroke-width="0.5" stroke-opacity="0.5"/>
+                <text x="65" y="224" text-anchor="middle" fill="#4ade80" fill-opacity="0.5" font-size="6" font-family="monospace">FAT PASS</text>
+                <text x="65" y="231" text-anchor="middle" fill="#8B99A6" fill-opacity="0.4" font-size="5" font-family="monospace">SKD-SEP-014</text>
+              </svg>
+            </div>
+          </div>
+          <div class="ba-footer">
+            <div>
+              <div class="ba-title">Wellhead Production Skid — SKD-SEP-014</div>
+              <div class="ba-spec">Separator + Pump Skid · E&I Hooked Up · FAT Completed</div>
+            </div>
+            <span class="ba-badge">Delivered</span>
+          </div>
+        </div>
+
+      </div><!-- /ba-grid -->
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="container">
+      <div class="cta-inner">
+        <h2>Ready to see your<br>project <em>built?</em></h2>
+        <div class="cta-right">
+          <p>Send us your drawings, scope of work, or just a concept — and our engineering team will turn it into a fabricated reality, on time and to spec.</p>
+          <a href="contact.html" class="btn btn-primary">Start a Project →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+    <button class="lb-nav" id="lb-prev" onclick="navLightbox(-1)" aria-label="Previous">‹</button>
+    <button class="lb-nav" id="lb-next" onclick="navLightbox(1)" aria-label="Next">›</button>
+    <div id="lightbox-img"></div>
+    <div id="lightbox-info">
+      <div id="lightbox-cat"></div>
+      <div id="lightbox-title"></div>
+      <div id="lightbox-desc"></div>
+    </div>
+    <div id="lb-counter"></div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/layout.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Collect all photo items for lightbox
+    const photos = Array.from(document.querySelectorAll('.photo-item'));
+    let current = 0;
+
+    function openLightbox(idx) {
+      current = idx;
+      renderLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function navLightbox(dir) {
+      current = (current + dir + photos.length) % photos.length;
+      renderLightbox();
+    }
+
+    function renderLightbox() {
+      const item  = photos[current];
+      const inner = item.querySelector('.photo-inner').innerHTML;
+      document.getElementById('lightbox-img').innerHTML   = `<div style="max-width:800px;width:100%;">${inner}</div>`;
+      document.getElementById('lightbox-cat').textContent   = item.dataset.gcat?.toUpperCase() || '';
+      document.getElementById('lightbox-title').textContent = item.dataset.title || '';
+      document.getElementById('lightbox-desc').textContent  = item.dataset.desc  || '';
+      document.getElementById('lb-counter').textContent     = `${current + 1} / ${photos.length}`;
+    }
+
+    // Close on backdrop click
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowRight') navLightbox(1);
+      if (e.key === 'ArrowLeft')  navLightbox(-1);
+      if (e.key === 'Escape')     closeLightbox();
+    });
+
+    // Gallery filter
+    document.querySelectorAll('[data-gfilter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-gfilter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.gfilter;
+        document.querySelectorAll('.photo-item').forEach(item => {
+          item.style.display = (f === 'all' || item.dataset.gcat === f) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

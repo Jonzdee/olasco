@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us | Olasco Engineering & Fabrication</title>
-  <meta name="description" content="Contact Olasco Engineering in Lagos, Nigeria. Request a quote, discuss a project, or visit our Trans-Amadi fabrication facility.">
+  <meta name="description" content="Contact Olasco Engineering in Port Harcourt, Nigeria. Request a quote, discuss a project, or visit our Trans-Amadi fabrication facility.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/pages.css" />
+  <!-- EmailJS SDK — required for contact form to send emails -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -37,8 +39,8 @@
         <div class="contact-detail reveal">
           <div>
             <div class="section-tag">Head Office & Workshop</div>
-            <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);">Lagos,<br><em>Nigeria.</em></h2>
-            <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-top:1rem; max-width:340px;">Our full engineering and fabrication facility is located in Trans-Amadi Industrial Layout — the heart of Lagos's industrial sector, 15 minutes from Onne Port Complex.</p>
+            <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);">Port Harcourt,<br><em>Nigeria.</em></h2>
+            <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-top:1rem; max-width:340px;">Our full engineering and fabrication facility is located in Trans-Amadi Industrial Layout — the heart of Port Harcourt's industrial sector, 15 minutes from Onne Port Complex.</p>
           </div>
 
           <div class="cd-item">
@@ -47,7 +49,7 @@
             </div>
             <div>
               <div class="cd-label">Workshop & Head Office</div>
-              <div class="cd-value">Plot 14, Block B<br>Trans-Amadi Industrial Layout<br>Lagos, Rivers State<br>Nigeria</div>
+              <div class="cd-value">Plot 14, Block B<br>Trans-Amadi Industrial Layout<br>Port Harcourt, Rivers State<br>Nigeria</div>
             </div>
           </div>
 
@@ -229,12 +231,12 @@
           </g>
           <!-- Nigeria coastline rough outline -->
           <path d="M180 200 Q220 210 280 195 Q330 185 380 195 Q430 205 490 190 Q540 175 580 185 Q620 195 660 180 Q700 168 720 180 Q740 195 760 185 Q800 170 840 180" stroke="#E8530A" stroke-width="1.5" fill="none" opacity="0.35"/>
-          <!-- Lagos marker -->
+          <!-- Port Harcourt marker -->
           <circle cx="520" cy="185" r="8" fill="#E8530A" opacity="0.8"/>
           <circle cx="520" cy="185" r="20" fill="none" stroke="#E8530A" stroke-width="1" opacity="0.4"/>
           <circle cx="520" cy="185" r="35" fill="none" stroke="#E8530A" stroke-width="0.5" opacity="0.25"/>
           <!-- Label -->
-          <text x="540" y="173" fill="#E8530A" font-size="12" font-family="Barlow Condensed" font-weight="700" letter-spacing="1">TRANS-AMADI, Lagos</text>
+          <text x="540" y="173" fill="#E8530A" font-size="12" font-family="Barlow Condensed" font-weight="700" letter-spacing="1">TRANS-AMADI, PORT HARCOURT</text>
           <text x="540" y="188" fill="#8B99A6" font-size="10" font-family="Barlow Condensed" letter-spacing="1">OLASCO ENGINEERING HQ &amp; FABRICATION FACILITY</text>
           <!-- Other project location dots -->
           <circle cx="490" cy="200" r="4" fill="#8B99A6" opacity="0.5"/>
@@ -244,7 +246,7 @@
           <circle cx="350" cy="130" r="4" fill="#8B99A6" opacity="0.35"/>
           <circle cx="280" cy="110" r="4" fill="#8B99A6" opacity="0.35"/>
           <!-- Coordinate labels -->
-          <text x="30" y="295" fill="#8B99A6" fill-opacity="0.3" font-size="9" font-family="monospace">4°45'N 7°01'E — Lagos, RIVERS STATE, NIGERIA</text>
+          <text x="30" y="295" fill="#8B99A6" fill-opacity="0.3" font-size="9" font-family="monospace">4°45'N 7°01'E — PORT HARCOURT, RIVERS STATE, NIGERIA</text>
         </svg>
         <div style="position:absolute; bottom:1.5rem; right:2rem; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; color:rgba(232,83,10,0.5); text-transform:uppercase;">
           ◆ Project Locations Across Nigeria
@@ -267,7 +269,7 @@
           <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-size:1rem; font-weight:700; color:#fff;">Senior Structural Engineer</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">COREN Reg. required · Lagos</div>
+              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">COREN Reg. required · Port Harcourt</div>
             </div>
             <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#4ade80; border:1px solid rgba(74,222,128,0.25); padding:0.2rem 0.6rem; text-transform:uppercase;">Open</span>
           </div>
@@ -281,7 +283,7 @@
           <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-size:1rem; font-weight:700; color:#fff;">Lead Pipe Fabricator / Fitter</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">ASME IX qualified · Lagos</div>
+              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">ASME IX qualified · Port Harcourt</div>
             </div>
             <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#4ade80; border:1px solid rgba(74,222,128,0.25); padding:0.2rem 0.6rem; text-transform:uppercase;">Open</span>
           </div>
