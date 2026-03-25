@@ -4,9 +4,9 @@
 
 /* ─── CONFIG — update these values ─── */
 const OLASCO_CONFIG = {
-  whatsapp : '+2348012345678',          // Your WhatsApp number with country code, no spaces
+  whatsapp: '+2348066331212',          // Your WhatsApp number with country code, no spaces
   waMessage: 'Hello Olasco Engineering, I would like to discuss a project.',
-  gaId     : 'G-XXXXXXXXXX',           // Replace with your GA4 Measurement ID
+  gaId: 'G-XXXXXXXXXX',           // Replace with your GA4 Measurement ID
 };
 
 (function () {
@@ -109,6 +109,52 @@ const OLASCO_CONFIG = {
     <span class="wa-tooltip">Chat on WhatsApp</span>
   </a>`;
 
+  /* ─── SCROLL TO TOP BUTTON ─── */
+  const STT_HTML = `
+  <button id="scroll-top-btn" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>`;
+
+  /* ─── SCROLL TO TOP STYLES (injected once, no extra .css file needed) ─── */
+  const STT_CSS = `
+  #scroll-top-btn {
+    position: fixed;
+    bottom: 5.5rem;          /* sits just above the WhatsApp button */
+    right: 2rem;
+    z-index: 998;
+    width: 48px;
+    height: 48px;
+    background: var(--flame, #E8530A);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease, background .2s ease;
+  }
+  #scroll-top-btn.stt-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  #scroll-top-btn:hover  { background: #ff6a22; }
+  #scroll-top-btn:active { background: #c44208; }
+  #scroll-top-btn svg {
+    width: 20px; height: 20px;
+    stroke: #fff; stroke-width: 2.5;
+    fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  @media (max-width: 640px) {
+    #scroll-top-btn { bottom: 5rem; right: 1.25rem; width: 42px; height: 42px; }
+  }`;
+
   /* ─── COOKIE BANNER ─── */
   const COOKIE_HTML = `
   <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
@@ -127,16 +173,37 @@ const OLASCO_CONFIG = {
     </div>
   </div>`;
 
-  // Inject nav
+  // ─── INJECT NAV ───
   const navTarget = document.getElementById('nav-placeholder');
   if (navTarget) navTarget.outerHTML = NAV_HTML;
 
-  // Inject footer
+  // ─── INJECT FOOTER ───
   const footerTarget = document.getElementById('footer-placeholder');
   if (footerTarget) footerTarget.outerHTML = FOOTER_HTML;
 
-  // Inject WhatsApp button
+  // ─── INJECT WHATSAPP BUTTON ───
   document.body.insertAdjacentHTML('beforeend', WA_HTML);
+
+  // ─── INJECT SCROLL-TO-TOP BUTTON + STYLES ───
+  const styleTag = document.createElement('style');
+  styleTag.textContent = STT_CSS;
+  document.head.appendChild(styleTag);
+
+  document.body.insertAdjacentHTML('beforeend', STT_HTML);
+
+  const sttBtn = document.getElementById('scroll-top-btn');
+
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 320) {
+      sttBtn.classList.add('stt-visible');
+    } else {
+      sttBtn.classList.remove('stt-visible');
+    }
+  }, { passive: true });
+
+  sttBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   // ─── COOKIE CONSENT LOGIC ───
   const consent = localStorage.getItem('olasco_cookie_consent');
@@ -182,12 +249,12 @@ const OLASCO_CONFIG = {
     if (OLASCO_CONFIG.gaId === 'G-XXXXXXXXXX') return; // placeholder — skip until real ID added
     if (document.getElementById('ga-script')) return;  // already loaded
     const s = document.createElement('script');
-    s.id  = 'ga-script';
+    s.id = 'ga-script';
     s.src = `https://www.googletagmanager.com/gtag/js?id=${OLASCO_CONFIG.gaId}`;
     s.async = true;
     document.head.appendChild(s);
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
+    window.gtag = function () { dataLayer.push(arguments); };
     gtag('js', new Date());
     gtag('config', OLASCO_CONFIG.gaId, { anonymize_ip: true });
   }
