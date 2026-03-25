@@ -1,103 +1,833 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us | Olasco Engineering & Fabrication</title>
-  <meta name="description" content="Contact Olasco Engineering in Port Harcourt, Nigeria. Request a quote, discuss a project, or visit our Trans-Amadi fabrication facility.">
+  <meta name="description"
+    content="Contact Olasco Engineering in Port Harcourt, Nigeria. Request a quote, discuss a project, or visit our Trans-Amadi fabrication facility.">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,900&family=Barlow:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/pages.css" />
-  <!-- EmailJS SDK — required for contact form to send emails -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    :root {
+      --flame: #E8530A;
+      --ember: #F97316;
+      --steel: #5A6470;
+      --iron: #0f1114;
+      --forge: #13161b;
+      --nav-h: 72px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      color: #1a1e26;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE HERO — mirrors gallery page exactly
+    ══════════════════════════════════════════ */
+    .page-hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: clamp(280px, 46vw, 520px);
+      padding-top: var(--nav-h);
+      padding-bottom: 3rem;
+    }
+
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(8, 9, 12, 0.92) 0%, rgba(12, 14, 18, 0.65) 55%, rgba(8, 9, 12, 0.88) 100%),
+        url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1400&auto=format&fit=crop&q=70') center/cover no-repeat;
+      z-index: 0;
+    }
+
+    .page-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232, 83, 10, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 83, 10, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      z-index: 1;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 3px;
+      background: var(--flame);
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .page-hero-inner {
+      position: relative;
+      z-index: 3;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 6vw, 5rem);
+      width: 100%;
+    }
+
+    .page-hero-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--flame);
+      border: 1px solid rgba(232, 83, 10, 0.45);
+      padding: 0.28rem 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .page-hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.25rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 0.92;
+      text-transform: uppercase;
+      color: #fff;
+      margin: 0 0 1rem;
+    }
+
+    .page-hero h1 em {
+      font-style: normal;
+      color: var(--flame);
+    }
+
+    .page-hero-sub {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.62);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── HERO STAT PILLS ── */
+    .hero-stats {
+      position: relative;
+      z-index: 3;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 6vw, 5rem);
+      width: 100%;
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .hero-stat-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--flame);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .breadcrumb {
+      position: relative;
+      z-index: 3;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.5rem clamp(1.25rem, 6vw, 5rem) 0;
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .breadcrumb a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--flame);
+    }
+
+    .breadcrumb span:last-child {
+      color: var(--flame);
+    }
+
+    /* ══════════════════════════════════════════
+       CONTACT BODY
+    ══════════════════════════════════════════ */
+    .contact-wrap {
+      background: #ffffff;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 5rem clamp(1.25rem, 6vw, 5rem);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    /* ── SECTION LABELS ── */
+    .section-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--flame);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .section-tag::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--flame);
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #1a1e26;
+      line-height: 0.95;
+    }
+
+    .section-title em {
+      font-style: normal;
+      color: var(--flame);
+    }
+
+    /* ── CONTACT DETAIL ITEMS ── */
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .cd-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid rgba(232, 83, 10, 0.12);
+      background: rgba(232, 83, 10, 0.02);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .cd-item:hover {
+      border-color: rgba(232, 83, 10, 0.3);
+      background: rgba(232, 83, 10, 0.05);
+    }
+
+    .cd-icon {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      background: rgba(232, 83, 10, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cd-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--flame);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .cd-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--flame);
+      margin-bottom: 0.5rem;
+    }
+
+    .cd-value {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--steel);
+      line-height: 1.8;
+    }
+
+    .cd-value a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .cd-value a:hover {
+      color: var(--flame);
+    }
+
+    /* ── CONTACT FORM ── */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cf-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .cf-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .cf-group label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--steel);
+    }
+
+    .cf-group input,
+    .cf-group select,
+    .cf-group textarea {
+      background: #f8f8f8;
+      border: 1px solid #e2e4e8;
+      color: #1a1e26;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+
+    .cf-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23E8530A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-color: #f8f8f8;
+      padding-right: 2.5rem;
+    }
+
+    .cf-group select option {
+      background: #fff;
+      color: #1a1e26;
+    }
+
+    .cf-group input:focus,
+    .cf-group select:focus,
+    .cf-group textarea:focus {
+      border-color: var(--flame);
+      background: #fff;
+    }
+
+    .cf-group input::placeholder,
+    .cf-group textarea::placeholder {
+      color: #adb3bb;
+    }
+
+    .cf-group textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .cf-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+
+    .cf-checkbox input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--flame);
+    }
+
+    .cf-checkbox span {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--steel);
+      line-height: 1.6;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--flame);
+      color: #fff;
+      padding: 1rem 2.25rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      background: var(--ember);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .form-msg {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.75rem 1rem;
+      display: none;
+    }
+
+    .form-msg.success {
+      display: block;
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .form-msg.error {
+      display: block;
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.08);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(232, 83, 10, 0.12);
+      margin: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       MAP SECTION
+    ══════════════════════════════════════════ */
+    .map-section {
+      background: #f4f5f7;
+      padding: 0 clamp(1.25rem, 6vw, 5rem) 5rem;
+    }
+
+    .map-section-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .map-embed {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(232, 83, 10, 0.15);
+    }
+
+    .map-embed svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .map-label {
+      position: absolute;
+      bottom: 1.25rem;
+      right: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: rgba(232, 83, 10, 0.5);
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════
+       CAREERS
+    ══════════════════════════════════════════ */
+    .careers-section {
+      background: #ffffff;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .careers-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 5rem clamp(1.25rem, 6vw, 5rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .careers-copy p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--steel);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .careers-copy .btn-primary {
+      width: auto;
+      display: inline-flex;
+    }
+
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    .job-item {
+      background: #fff;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.2s;
+    }
+
+    .job-item:hover {
+      background: #f8f8f8;
+    }
+
+    .job-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1e26;
+    }
+
+    .job-meta {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--steel);
+      margin-top: 0.2rem;
+    }
+
+    .job-badge {
+      flex-shrink: 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.65rem;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    .job-badge.open {
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.25);
+    }
+
+    .job-badge.shortlisting {
+      color: var(--flame);
+      border-color: rgba(232, 83, 10, 0.3);
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .careers-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cf-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .container {
+        padding: 3.5rem clamp(1rem, 5vw, 2rem);
+      }
+
+      .map-section {
+        padding: 0 clamp(1rem, 5vw, 2rem) 3.5rem;
+      }
+
+      .careers-inner {
+        padding: 3.5rem clamp(1rem, 5vw, 2rem);
+      }
+
+      .hero-stats {
+        gap: 1.5rem;
+      }
+
+      .hero-stat-val {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-hero {
+        min-height: clamp(220px, 70vw, 340px);
+        padding-bottom: 2rem;
+      }
+
+      .page-hero::before {
+        display: none;
+      }
+
+      .page-hero-sub {
+        display: none;
+      }
+
+      .breadcrumb {
+        padding-top: 1rem;
+      }
+
+      .hero-stats {
+        padding: 0 clamp(1rem, 5vw, 2rem);
+        gap: 1.25rem;
+      }
+
+      .cd-item {
+        padding: 1rem;
+      }
+
+      .contact-layout {
+        gap: 2.5rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-stats {
+        gap: 1rem;
+      }
+
+      .hero-stat-val {
+        font-size: 1.1rem;
+      }
+
+      .hero-stat-label {
+        font-size: 0.55rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
   <div id="nav-placeholder"></div>
 
-  <!-- PAGE HERO -->
-  <div class="page-hero" style="padding-top: var(--nav-h);">
+  <!-- ════════════════════════════
+       PAGE HERO
+  ════════════════════════════ -->
+  <div class="page-hero">
     <div class="page-hero-bg"></div>
     <div class="page-hero-grid"></div>
-    <div class="page-hero-inner">
-      <div class="page-hero-tag">Reach Out</div>
-      <h1>Get in<br><em>Touch</em></h1>
-    </div>
     <div class="breadcrumb">
       <a href="index.html">Home</a>
       <span>›</span>
       <span>Contact</span>
     </div>
+    <div class="page-hero-inner">
+      <div class="page-hero-tag">Reach Out</div>
+      <h1>Get in<br><em>Touch</em></h1>
+      <p class="page-hero-sub">Send us your project scope, drawings, or concept — our engineering team in Port Harcourt
+        will respond within one business day.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-val">24H</span>
+        <span class="hero-stat-label">Response Time</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">20+</span>
+        <span class="hero-stat-label">Years Experience</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">PH</span>
+        <span class="hero-stat-label">Trans-Amadi HQ</span>
+      </div>
+    </div>
   </div>
 
-  <!-- CONTACT BODY -->
-  <div style="background: var(--forge);">
-    <div class="container section">
+  <!-- ════════════════════════════
+       CONTACT BODY
+  ════════════════════════════ -->
+  <div class="contact-wrap">
+    <div class="container">
       <div class="contact-layout">
 
         <!-- LEFT: Details -->
-        <div class="contact-detail reveal">
+        <div class="contact-detail">
           <div>
-            <div class="section-tag">Head Office & Workshop</div>
-            <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);">Port Harcourt,<br><em>Nigeria.</em></h2>
-            <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-top:1rem; max-width:340px;">Our full engineering and fabrication facility is located in Trans-Amadi Industrial Layout — the heart of Port Harcourt's industrial sector, 15 minutes from Onne Port Complex.</p>
+            <div class="section-tag">Head Office &amp; Workshop</div>
+            <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 3rem); color: #1a1e26;">
+              Port Harcourt,<br><em>Nigeria.</em>
+            </h2>
+            <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-top:1rem;">
+              Our full engineering and fabrication facility is located in Trans-Amadi Industrial Layout — the heart of
+              Port Harcourt's industrial sector, 15 minutes from Onne Port Complex.
+            </p>
           </div>
 
           <div class="cd-item">
             <div class="cd-icon">
-              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
             </div>
             <div>
-              <div class="cd-label">Workshop & Head Office</div>
-              <div class="cd-value">Plot 14, Block B<br>Trans-Amadi Industrial Layout<br>Port Harcourt, Rivers State<br>Nigeria</div>
+              <div class="cd-label">Workshop &amp; Head Office</div>
+              <div class="cd-value">
+                Plot 14, Block B<br>
+                Trans-Amadi Industrial Layout<br>
+                Port Harcourt, Rivers State<br>
+                Nigeria
+              </div>
             </div>
           </div>
 
           <div class="cd-item">
             <div class="cd-icon">
-              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+              </svg>
             </div>
             <div>
               <div class="cd-label">Phone Numbers</div>
               <div class="cd-value">
-                <a href="tel:+2348012345678" style="color:inherit; text-decoration:none;">+234 (0) 801 234 5678</a> — Projects<br>
-                <a href="tel:+2348098765432" style="color:inherit; text-decoration:none;">+234 (0) 809 876 5432</a> — General<br>
-                <a href="tel:+2348055544433" style="color:inherit; text-decoration:none;">+234 (0) 805 554 4433</a> — Emergency
+                <a href="tel:+2348012345678">+234 (0) 801 234 5678</a> — Projects<br>
+                <a href="tel:+2348098765432">+234 (0) 809 876 5432</a> — General<br>
+                <a href="tel:+2348055544433">+234 (0) 805 554 4433</a> — Emergency
               </div>
             </div>
           </div>
 
           <div class="cd-item">
             <div class="cd-icon">
-              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <svg viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
             </div>
             <div>
               <div class="cd-label">Email</div>
               <div class="cd-value">
-                <a href="mailto:projects@olasco.ng" style="color:var(--flame); text-decoration:none;">projects@olasco.ng</a> — New Enquiries<br>
-                <a href="mailto:info@olasco.ng" style="color:inherit; text-decoration:none;">info@olasco.ng</a> — General<br>
-                <a href="mailto:hsse@olasco.ng" style="color:inherit; text-decoration:none;">hsse@olasco.ng</a> — HSSE
+                <a href="mailto:projects@olasco.ng" style="color:var(--flame);">projects@olasco.ng</a> — New
+                Enquiries<br>
+                <a href="mailto:info@olasco.ng">info@olasco.ng</a> — General<br>
+                <a href="mailto:hsse@olasco.ng">hsse@olasco.ng</a> — HSSE
               </div>
             </div>
           </div>
 
           <div class="cd-item">
             <div class="cd-icon">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
             </div>
             <div>
               <div class="cd-label">Working Hours (WAT)</div>
               <div class="cd-value">
                 Monday – Friday: 7:00 AM – 6:00 PM<br>
                 Saturday: 8:00 AM – 2:00 PM<br>
-                <span style="color:rgba(139,153,166,0.5);">Sunday & Public Holidays: Closed</span>
+                <span style="color:rgba(90,100,112,0.5);">Sunday &amp; Public Holidays: Closed</span>
               </div>
             </div>
           </div>
 
           <div class="cd-item">
             <div class="cd-icon">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
             </div>
             <div>
               <div class="cd-label">RC Number &amp; Accreditation</div>
@@ -111,11 +841,14 @@
         </div>
 
         <!-- RIGHT: Form -->
-        <div class="reveal">
+        <div>
           <div class="section-tag">Send an Enquiry</div>
-          <h2 class="section-title" style="font-size:clamp(1.8rem,3vw,2.8rem); margin-bottom:2rem;">Tell Us About<br>Your <em>Project</em></h2>
+          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem); margin-bottom: 2rem; color: #1a1e26;">
+            Tell Us About<br>Your <em>Project</em>
+          </h2>
 
           <form class="contact-form" id="contactForm" novalidate>
+
             <div class="cf-row">
               <div class="cf-group">
                 <label for="firstName">First Name *</label>
@@ -126,6 +859,7 @@
                 <input type="text" id="lastName" name="lastName" placeholder="Okonkwo" required />
               </div>
             </div>
+
             <div class="cf-row">
               <div class="cf-group">
                 <label for="email">Email Address *</label>
@@ -136,10 +870,13 @@
                 <input type="tel" id="phone" name="phone" placeholder="+234 801 234 5678" />
               </div>
             </div>
+
             <div class="cf-group">
               <label for="company">Company / Organisation *</label>
-              <input type="text" id="company" name="company" placeholder="e.g. Shell SPDC, Seplat Energy, XYZ Ltd" required />
+              <input type="text" id="company" name="company" placeholder="e.g. Shell SPDC, Seplat Energy, XYZ Ltd"
+                required />
             </div>
+
             <div class="cf-row">
               <div class="cf-group">
                 <label for="service">Service Required</label>
@@ -147,9 +884,9 @@
                   <option value="">— Select a service —</option>
                   <option>Structural Steel Fabrication</option>
                   <option>Pipe Spool Fabrication</option>
-                  <option>Pressure Vessels & Tanks</option>
+                  <option>Pressure Vessels &amp; Tanks</option>
                   <option>Mechanical Engineering Design</option>
-                  <option>NDT & Inspection</option>
+                  <option>NDT &amp; Inspection</option>
                   <option>Modular / Skid Construction</option>
                   <option>Multiple Services</option>
                   <option>Other</option>
@@ -173,6 +910,7 @@
                 </select>
               </div>
             </div>
+
             <div class="cf-row">
               <div class="cf-group">
                 <label for="budget">Estimated Budget (USD)</label>
@@ -199,101 +937,134 @@
                 </select>
               </div>
             </div>
+
             <div class="cf-group">
               <label for="message">Project Description *</label>
-              <textarea id="message" name="message" rows="6" placeholder="Briefly describe the project scope — include facility type, materials required, applicable codes/standards, and any existing drawings or specifications if available..." required></textarea>
+              <textarea id="message" name="message" rows="6"
+                placeholder="Briefly describe the project scope — include facility type, materials required, applicable codes/standards, and any existing drawings or specifications if available..."
+                required></textarea>
             </div>
-            <div class="cf-group" style="flex-direction:row; align-items:flex-start; gap:.75rem;">
-              <input type="checkbox" id="nda" name="nda" style="margin-top:3px; accent-color: var(--flame);" />
-              <label for="nda" style="font-size:0.8rem; font-weight:300; color:var(--steel); letter-spacing:0; text-transform:none; cursor:pointer;">I require an NDA / Confidentiality Agreement before discussing this project</label>
-            </div>
-            <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">Send Enquiry →</button>
+
+            <label class="cf-checkbox">
+              <input type="checkbox" id="nda" name="nda" />
+              <span>I require an NDA / Confidentiality Agreement before discussing this project</span>
+            </label>
+
+            <button type="submit" class="btn-primary">
+              Send Enquiry
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+
             <div id="formMessage" class="form-msg"></div>
           </form>
         </div>
 
       </div>
+    </div>
 
-      <!-- MAP placeholder -->
-      <div class="map-embed reveal" style="margin-top:5rem;">
-        <svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <rect width="1200" height="300" fill="#1a1d21"/>
-          <g stroke="#E8530A" stroke-width="0.5" fill="none" opacity="0.12">
-            <!-- grid -->
-            <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
-            <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
-            <line x1="100" y1="0" x2="100" y2="300"/><line x1="200" y1="0" x2="200" y2="300"/>
-            <line x1="300" y1="0" x2="300" y2="300"/><line x1="400" y1="0" x2="400" y2="300"/>
-            <line x1="500" y1="0" x2="500" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/>
-            <line x1="700" y1="0" x2="700" y2="300"/><line x1="800" y1="0" x2="800" y2="300"/>
-            <line x1="900" y1="0" x2="900" y2="300"/><line x1="1000" y1="0" x2="1000" y2="300"/>
-            <line x1="1100" y1="0" x2="1100" y2="300"/>
-          </g>
-          <!-- Nigeria coastline rough outline -->
-          <path d="M180 200 Q220 210 280 195 Q330 185 380 195 Q430 205 490 190 Q540 175 580 185 Q620 195 660 180 Q700 168 720 180 Q740 195 760 185 Q800 170 840 180" stroke="#E8530A" stroke-width="1.5" fill="none" opacity="0.35"/>
-          <!-- Port Harcourt marker -->
-          <circle cx="520" cy="185" r="8" fill="#E8530A" opacity="0.8"/>
-          <circle cx="520" cy="185" r="20" fill="none" stroke="#E8530A" stroke-width="1" opacity="0.4"/>
-          <circle cx="520" cy="185" r="35" fill="none" stroke="#E8530A" stroke-width="0.5" opacity="0.25"/>
-          <!-- Label -->
-          <text x="540" y="173" fill="#E8530A" font-size="12" font-family="Barlow Condensed" font-weight="700" letter-spacing="1">TRANS-AMADI, PORT HARCOURT</text>
-          <text x="540" y="188" fill="#8B99A6" font-size="10" font-family="Barlow Condensed" letter-spacing="1">OLASCO ENGINEERING HQ &amp; FABRICATION FACILITY</text>
-          <!-- Other project location dots -->
-          <circle cx="490" cy="200" r="4" fill="#8B99A6" opacity="0.5"/>
-          <circle cx="440" cy="195" r="4" fill="#8B99A6" opacity="0.4"/>
-          <circle cx="410" cy="188" r="4" fill="#8B99A6" opacity="0.4"/>
-          <circle cx="640" cy="178" r="4" fill="#8B99A6" opacity="0.4"/>
-          <circle cx="350" cy="130" r="4" fill="#8B99A6" opacity="0.35"/>
-          <circle cx="280" cy="110" r="4" fill="#8B99A6" opacity="0.35"/>
-          <!-- Coordinate labels -->
-          <text x="30" y="295" fill="#8B99A6" fill-opacity="0.3" font-size="9" font-family="monospace">4°45'N 7°01'E — PORT HARCOURT, RIVERS STATE, NIGERIA</text>
-        </svg>
-        <div style="position:absolute; bottom:1.5rem; right:2rem; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; color:rgba(232,83,10,0.5); text-transform:uppercase;">
-          ◆ Project Locations Across Nigeria
+    <!-- MAP -->
+    <div class="map-section">
+      <div class="map-section-inner">
+        <div class="map-embed">
+          <svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="1200" height="300" fill="#1a1d21" />
+            <g stroke="#E8530A" stroke-width="0.5" fill="none" opacity="0.12">
+              <line x1="0" y1="60" x2="1200" y2="60" />
+              <line x1="0" y1="120" x2="1200" y2="120" />
+              <line x1="0" y1="180" x2="1200" y2="180" />
+              <line x1="0" y1="240" x2="1200" y2="240" />
+              <line x1="100" y1="0" x2="100" y2="300" />
+              <line x1="200" y1="0" x2="200" y2="300" />
+              <line x1="300" y1="0" x2="300" y2="300" />
+              <line x1="400" y1="0" x2="400" y2="300" />
+              <line x1="500" y1="0" x2="500" y2="300" />
+              <line x1="600" y1="0" x2="600" y2="300" />
+              <line x1="700" y1="0" x2="700" y2="300" />
+              <line x1="800" y1="0" x2="800" y2="300" />
+              <line x1="900" y1="0" x2="900" y2="300" />
+              <line x1="1000" y1="0" x2="1000" y2="300" />
+              <line x1="1100" y1="0" x2="1100" y2="300" />
+            </g>
+            <path
+              d="M180 200 Q220 210 280 195 Q330 185 380 195 Q430 205 490 190 Q540 175 580 185 Q620 195 660 180 Q700 168 720 180 Q740 195 760 185 Q800 170 840 180"
+              stroke="#E8530A" stroke-width="1.5" fill="none" opacity="0.35" />
+            <circle cx="520" cy="185" r="8" fill="#E8530A" opacity="0.8" />
+            <circle cx="520" cy="185" r="20" fill="none" stroke="#E8530A" stroke-width="1" opacity="0.4" />
+            <circle cx="520" cy="185" r="35" fill="none" stroke="#E8530A" stroke-width="0.5" opacity="0.25" />
+            <text x="545" y="173" fill="#E8530A" font-size="12" font-family="Barlow Condensed" font-weight="700"
+              letter-spacing="1">TRANS-AMADI, PORT HARCOURT</text>
+            <text x="545" y="188" fill="#8B99A6" font-size="10" font-family="Barlow Condensed" letter-spacing="1">OLASCO
+              ENGINEERING HQ &amp; FABRICATION FACILITY</text>
+            <circle cx="490" cy="200" r="4" fill="#8B99A6" opacity="0.5" />
+            <circle cx="440" cy="195" r="4" fill="#8B99A6" opacity="0.4" />
+            <circle cx="410" cy="188" r="4" fill="#8B99A6" opacity="0.4" />
+            <circle cx="640" cy="178" r="4" fill="#8B99A6" opacity="0.4" />
+            <circle cx="350" cy="130" r="4" fill="#8B99A6" opacity="0.35" />
+            <circle cx="280" cy="110" r="4" fill="#8B99A6" opacity="0.35" />
+            <text x="30" y="292" fill="#8B99A6" fill-opacity="0.3" font-size="9" font-family="monospace">4°45'N 7°01'E —
+              PORT HARCOURT, RIVERS STATE, NIGERIA</text>
+          </svg>
+          <div class="map-label">◆ Project Locations Across Nigeria</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CAREERS -->
-  <div style="background: var(--iron); border-top: 1px solid rgba(232,83,10,0.1);" id="careers">
-    <div class="container section">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;" class="reveal">
-        <div>
-          <div class="section-tag">Join Our Team</div>
-          <h2 class="section-title">Careers at<br><em>Olasco</em></h2>
-          <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.85; margin-bottom:1.5rem;">We are always looking for skilled engineers, fabricators, welders, inspectors, and project professionals who are passionate about raising the standard of Nigerian engineering. If you're serious about your craft, we want to hear from you.</p>
-          <a href="mailto:careers@olasco.ng" class="btn btn-primary">Send Your CV →</a>
+  <!-- ════════════════════════════
+       CAREERS
+  ════════════════════════════ -->
+  <div class="careers-section" id="careers">
+    <div class="careers-inner">
+      <div class="careers-copy">
+        <div class="section-tag">Join Our Team</div>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 3rem); color: #1a1e26;">
+          Careers at<br><em>Olasco</em>
+        </h2>
+        <p>We are always looking for skilled engineers, fabricators, welders, inspectors, and project professionals who
+          are passionate about raising the standard of Nigerian engineering. If you're serious about your craft, we want
+          to hear from you.</p>
+        <a href="mailto:careers@olasco.ng" class="btn-primary" style="width:auto; display:inline-flex;">
+          Send Your CV
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="job-list">
+        <div class="job-item">
+          <div>
+            <div class="job-title">Senior Structural Engineer</div>
+            <div class="job-meta">COREN Reg. required · Port Harcourt</div>
+          </div>
+          <span class="job-badge open">Open</span>
         </div>
-        <div style="display:flex; flex-direction:column; gap:1px; background:rgba(232,83,10,0.08);">
-          <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:1rem; font-weight:700; color:#fff;">Senior Structural Engineer</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">COREN Reg. required · Port Harcourt</div>
-            </div>
-            <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#4ade80; border:1px solid rgba(74,222,128,0.25); padding:0.2rem 0.6rem; text-transform:uppercase;">Open</span>
+        <div class="job-item">
+          <div>
+            <div class="job-title">QC Inspector — NDT Level II</div>
+            <div class="job-meta">UT/RT Cert. required · Trans-Amadi</div>
           </div>
-          <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:1rem; font-weight:700; color:#fff;">QC Inspector — NDT Level II</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">UT/RT Cert. required · Trans-Amadi</div>
-            </div>
-            <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#4ade80; border:1px solid rgba(74,222,128,0.25); padding:0.2rem 0.6rem; text-transform:uppercase;">Open</span>
+          <span class="job-badge open">Open</span>
+        </div>
+        <div class="job-item">
+          <div>
+            <div class="job-title">Lead Pipe Fabricator / Fitter</div>
+            <div class="job-meta">ASME IX qualified · Port Harcourt</div>
           </div>
-          <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:1rem; font-weight:700; color:#fff;">Lead Pipe Fabricator / Fitter</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">ASME IX qualified · Port Harcourt</div>
-            </div>
-            <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#4ade80; border:1px solid rgba(74,222,128,0.25); padding:0.2rem 0.6rem; text-transform:uppercase;">Open</span>
+          <span class="job-badge open">Open</span>
+        </div>
+        <div class="job-item">
+          <div>
+            <div class="job-title">Project Engineer</div>
+            <div class="job-meta">5+ years EPC experience · PH or site</div>
           </div>
-          <div style="background:var(--iron); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:1rem; font-weight:700; color:#fff;">Project Engineer</div>
-              <div style="font-size:0.78rem; font-weight:300; color:var(--steel); margin-top:0.2rem;">5+ years EPC experience · PH or site</div>
-            </div>
-            <span style="font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; color:#E8530A; border:1px solid rgba(232,83,10,0.3); padding:0.2rem 0.6rem; text-transform:uppercase;">Shortlisting</span>
-          </div>
+          <span class="job-badge shortlisting">Shortlisting</span>
         </div>
       </div>
     </div>
@@ -303,5 +1074,49 @@
 
   <script src="js/layout.js"></script>
   <script src="js/main.js"></script>
+
+  <script>
+    // Form submission handler
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const msg = document.getElementById('formMessage');
+
+      // Basic validation
+      const required = ['firstName', 'lastName', 'email', 'company', 'message'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.style.borderColor = '#f87171';
+          valid = false;
+        } else {
+          el.style.borderColor = '';
+        }
+      });
+
+      if (!valid) {
+        msg.className = 'form-msg error';
+        msg.textContent = 'Please fill in all required fields.';
+        return;
+      }
+
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      // Replace with your EmailJS serviceId & templateId, or wire to your backend
+      // emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
+      //   .then(() => { ... })
+      //   .catch(() => { ... });
+
+      // Simulated success for now:
+      setTimeout(() => {
+        msg.className = 'form-msg success';
+        msg.textContent = 'Enquiry sent! Our team will be in touch within one business day.';
+        btn.textContent = 'Enquiry Sent ✓';
+      }, 900);
+    });
+  </script>
 </body>
+
 </html>

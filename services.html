@@ -1,25 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services | Olasco Engineering & Fabrication</title>
-  <meta name="description" content="Structural fabrication, pipe spools, pressure vessels, mechanical engineering, NDT inspection and modular construction in Nigeria.">
+  <meta name="description"
+    content="Structural fabrication, pipe spools, pressure vessels, mechanical engineering, NDT inspection and modular construction in Lagos, Nigeria.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/pages.css" />
+
+  <style>
+    /* ══════════════════════════════════════════
+       PAGE HERO — mobile-first
+    ══════════════════════════════════════════ */
+    .page-hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-top: var(--nav-h, 72px);
+      min-height: clamp(260px, 46vw, 520px);
+      padding-bottom: 3rem;
+    }
+
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(8, 9, 12, 0.92) 0%, rgba(12, 14, 18, 0.68) 55%, rgba(8, 9, 12, 0.88) 100%),
+        url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1400&auto=format&fit=crop&q=70') center/cover no-repeat;
+      z-index: 0;
+    }
+
+    .page-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232, 83, 10, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 83, 10, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      z-index: 1;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 3px;
+      background: var(--flame, #E8530A);
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .page-hero-inner {
+      position: relative;
+      z-index: 3;
+      padding: 0 clamp(1.25rem, 6vw, 5rem);
+    }
+
+    .page-hero-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--flame, #E8530A);
+      border: 1px solid rgba(232, 83, 10, 0.45);
+      padding: 0.28rem 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .page-hero-inner h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.92;
+      color: #fff;
+      font-size: clamp(2.25rem, 8vw, 6rem);
+      margin: 0 0 1rem;
+    }
+
+    .page-hero-inner h1 em {
+      font-style: normal;
+      color: var(--flame, #E8530A);
+    }
+
+    .page-hero-sub {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.62);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0;
+    }
+
+    .breadcrumb {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.42);
+      padding: 1.5rem clamp(1.25rem, 6vw, 5rem) 0;
+    }
+
+    .breadcrumb a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--flame, #E8530A);
+    }
+
+    .breadcrumb span:last-child {
+      color: var(--flame, #E8530A);
+    }
+
+    @media (max-width: 640px) {
+      .page-hero {
+        min-height: clamp(220px, 70vw, 340px);
+        padding-bottom: 2rem;
+      }
+
+      .page-hero::before {
+        display: none;
+      }
+
+      .page-hero-sub {
+        display: none;
+      }
+
+      .breadcrumb {
+        padding-top: 1rem;
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       INTRO GRID
+    ══════════════════════════════════════════ */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════
+       SERVICE BLOCK — alternating 2-col layout
+    ══════════════════════════════════════════ */
+    .service-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+      padding: 4rem 0;
+      border-bottom: 1px solid rgba(232, 83, 10, 0.10);
+    }
+
+    .service-block:last-child {
+      border-bottom: none;
+    }
+
+    .svc-visual {
+      position: sticky;
+      top: 6rem;
+      border: 1px solid rgba(232, 83, 10, 0.20);
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: #1a1d21;
+    }
+
+    /* actual project photo */
+    .svc-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.5s ease;
+    }
+
+    .svc-visual:hover img {
+      transform: scale(1.03);
+    }
+
+    /* placeholder shown when no src is set */
+    .svc-visual-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: rgba(232, 83, 10, 0.35);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 2rem;
+      border: 2px dashed rgba(232, 83, 10, 0.18);
+      margin: 1rem;
+      border-radius: 3px;
+      box-sizing: border-box;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+    }
+
+    .svc-visual-placeholder svg {
+      width: 36px;
+      height: 36px;
+      stroke: rgba(232, 83, 10, 0.35);
+      fill: none;
+      stroke-width: 1.2;
+    }
+
+    .svc-visual-label {
+      font-size: 0.65rem;
+      color: rgba(232, 83, 10, 0.22);
+      margin-top: 0.25rem;
+    }
+
+    .svc-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .svc-feature {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--steel, #8a9bb0);
+      padding: 0.55rem 0.75rem;
+      border-left: 2px solid var(--flame, #E8530A);
+      background: rgba(232, 83, 10, 0.04);
+    }
+
+    .svc-icon-large {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(232, 83, 10, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .svc-icon-large svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--flame, #E8530A);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════════════ */
+
+    /* Tablet ≤ 900px */
+    @media (max-width: 900px) {
+      .intro-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .service-block {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 3rem 0;
+      }
+
+      /* on mobile the visual SVG goes BELOW the text regardless of DOM order */
+      .service-block .svc-visual {
+        position: static;
+        order: 2;
+      }
+
+      .service-block>div:not(.svc-visual) {
+        order: 1;
+      }
+    }
+
+    /* Mobile ≤ 600px */
+    @media (max-width: 600px) {
+      .service-block {
+        gap: 1.5rem;
+        padding: 2.5rem 0;
+      }
+
+      .section-title {
+        font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+      }
+
+      .svc-feature {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
   <div id="nav-placeholder"></div>
 
   <!-- PAGE HERO -->
-  <div class="page-hero" style="padding-top: var(--nav-h);">
+  <div class="page-hero">
     <div class="page-hero-bg"></div>
     <div class="page-hero-grid"></div>
     <div class="page-hero-inner">
       <div class="page-hero-tag">What We Do</div>
       <h1>Our<br><em>Services</em></h1>
+      <p class="page-hero-sub">
+        Full-scope fabrication and engineering delivered from our<br>
+        Iganmu Industrial Estate facility — Lagos, Nigeria.
+      </p>
     </div>
     <div class="breadcrumb">
       <a href="index.html">Home</a>
@@ -31,13 +343,16 @@
   <!-- INTRO -->
   <div style="background: var(--forge);">
     <div class="container section-sm" style="padding-top: 3.5rem;">
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 4rem;" class="reveal">
+      <div class="intro-grid reveal">
         <div>
           <div class="section-tag">End-to-End Capability</div>
           <h2 class="section-title">From Design to<br><em>Delivery</em></h2>
         </div>
         <p style="font-size: 0.95rem; font-weight: 300; color: var(--steel); line-height: 1.85; align-self: center;">
-          Olasco offers a fully integrated fabrication and engineering service — meaning your project can go from initial scope and engineering concept all the way through to fabrication, inspection, surface treatment, and site installation support under one roof, one quality system, one accountable team in Port Harcourt.
+          Olasco offers a fully integrated fabrication and engineering service — meaning your project can go from
+          initial scope and engineering concept all the way through to fabrication, inspection, surface treatment, and
+          site installation support under one roof, one quality system, one accountable team at our Iganmu Industrial
+          Estate workshop in Lagos.
         </p>
       </div>
     </div>
@@ -51,84 +366,87 @@
       <div class="service-block reveal" id="structural">
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="1" />
+              <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
+            </svg>
           </div>
           <div class="section-tag">01</div>
-          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Structural<br><em>Fabrication</em></h2>
+          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Structural<br><em>Fabrication</em>
+          </h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Olasco fabricates heavy structural steel for onshore and offshore facilities across Nigeria. Our workshop handles everything from primary structural frames and pipe racks to access platforms, walkways, stairways, and equipment support skids.
+            Olasco fabricates heavy structural steel for onshore and offshore facilities across Nigeria. Our Lagos
+            workshop handles everything from primary structural frames and pipe racks to access platforms, walkways,
+            stairways, and equipment support skids.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Our steel fabrication capability extends to materials including carbon steel (A36, A572), high-strength low-alloy (HSLA), stainless, and weathering steel. All structural work is executed to AISC / AWS D1.1 and client-specific standards.
+            Our steel fabrication capability covers carbon steel (A36, A572), high-strength low-alloy (HSLA), stainless,
+            and weathering steel. All structural work is executed to AISC / AWS D1.1 and client-specific standards. We
+            regularly supply EPC contractors and operators working on Lagos area terminals, the Apapa corridor, and
+            offshore platforms.
           </p>
           <div class="svc-features">
             <span class="svc-feature">Pipe racks, equipment skids, and module frames</span>
             <span class="svc-feature">Offshore jacket structures and deck modules</span>
             <span class="svc-feature">Jetty, pontoon, and marine berthing structures</span>
             <span class="svc-feature">Flare stacks, derrick masts, and elevated platforms</span>
-            <span class="svc-feature">Flow station structural packages</span>
+            <span class="svc-feature">Flow station and terminal structural packages</span>
             <span class="svc-feature">3D model-based fabrication (AVEVA E3D)</span>
           </div>
         </div>
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.45">
-              <!-- I-beam cross section -->
-              <rect x="60" y="60" width="120" height="10"/>
-              <rect x="110" y="70" width="20" height="90"/>
-              <rect x="60" y="160" width="120" height="10"/>
-              <!-- Hollow section -->
-              <rect x="230" y="60" width="110" height="110" rx="2"/>
-              <rect x="245" y="75" width="80" height="80" rx="1"/>
-              <!-- Angle section -->
-              <polyline points="60,220 60,280 130,280"/>
-              <polyline points="70,220 70,270 130,270"/>
-              <!-- Channel -->
-              <polyline points="230,220 230,280 290,280"/>
-              <polyline points="230,230 280,230"/>
-              <polyline points="230,270 280,270"/>
-              <polyline points="290,280 290,220"/>
-            </g>
-            <text x="200" y="295" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">STRUCTURAL SECTIONS</text>
-          </svg>
+          <!-- Replace src with your structural fabrication photo e.g. src="assets/services/structural.jpg" -->
+          <img src="/assets//Imported Carport Shades/2.jpeg" alt="Structural steel fabrication — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="1" />
+              <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/structural.jpg</span>
+          </div>
         </div>
       </div>
 
       <!-- 02 Pipe Fabrication -->
       <div class="service-block reveal" id="pipe">
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.45">
-              <!-- pipe horizontal -->
-              <rect x="40" y="130" width="320" height="40" rx="20"/>
-              <ellipse cx="40" cy="150" rx="20" ry="20"/>
-              <ellipse cx="360" cy="150" rx="20" ry="20"/>
-              <!-- flanges -->
-              <rect x="130" y="124" width="12" height="52"/>
-              <rect x="258" y="124" width="12" height="52"/>
-              <!-- elbow up -->
-              <path d="M200 130 Q200 60 270 60"/>
-              <path d="M200 110 Q200 80 270 80"/>
-              <!-- vertical pipe -->
-              <rect x="270" y="60" width="40" height="80" rx="20"/>
-              <ellipse cx="290" cy="60" rx="20" ry="8"/>
-            </g>
-            <text x="200" y="295" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">PIPE SPOOL ASSEMBLY</text>
-          </svg>
+          <!-- Replace src with your pipe spool photo e.g. src="assets/services/pipe-spool.jpg" -->
+          <img src="/assets/Imported Carport Shades/19.jpeg" alt="Pipe spool fabrication — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/pipe-spool.jpg</span>
+          </div>
         </div>
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8a4 4 0 100 8 4 4 0 000-8z"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 100 20A10 10 0 0012 2z" />
+              <path d="M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+            </svg>
           </div>
           <div class="section-tag">02</div>
-          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Pipe Spool<br><em>Fabrication</em></h2>
+          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Pipe Spool<br><em>Fabrication</em>
+          </h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Pipe fabrication is at the core of Olasco's workshop capability. We produce pipe spools in carbon steel, stainless steel (304/316L), duplex and super-duplex, alloy steel, and lined piping systems for all process, utility, and firewater applications.
+            Pipe fabrication is at the core of Olasco's workshop capability. We produce pipe spools in carbon steel,
+            stainless steel (304/316L), duplex and super-duplex, alloy steel, and lined piping systems for all process,
+            utility, and firewater applications.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Our pipe shop is equipped with CNC pipe cutting machines, automatic root-pass TIG welding stations, post-weld heat treatment (PWHT) furnaces, and a full hydrostatic test bay. We serve NNPC, Shell SPDC, Chevron, NLNG, and major EPC contractors operating in Nigeria.
+            Our Lagos pipe shop is equipped with CNC pipe cutting machines, automatic root-pass TIG welding stations,
+            post-weld heat treatment (PWHT) furnaces, and a full hydrostatic test bay. We serve NNPC, Chevron,
+            TotalEnergies, and major EPC contractors operating across Nigeria from our Iganmu facility.
           </p>
           <div class="svc-features">
             <span class="svc-feature">Carbon, SS, duplex, and alloy pipe spools ½" to 60"</span>
@@ -145,15 +463,22 @@
       <div class="service-block reveal" id="vessels">
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
           </div>
           <div class="section-tag">03</div>
-          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Pressure Vessels<br><em>&amp; Tanks</em></h2>
+          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Pressure Vessels<br><em>&amp;
+              Tanks</em></h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Olasco is an ASME-authorised pressure vessel manufacturer for vessels designed and fabricated to ASME Section VIII Div. 1 and Div. 2. Our pressure vessel shop produces separators, scrubbers, slug catchers, heat exchangers, and production headers for Nigeria's upstream and processing sectors.
+            Olasco is an ASME-authorised pressure vessel manufacturer for vessels designed and fabricated to ASME
+            Section VIII Div. 1 and Div. 2. Our pressure vessel shop produces separators, scrubbers, slug catchers, heat
+            exchangers, and production headers for Nigeria's upstream and processing sectors.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            We also fabricate atmospheric and low-pressure storage tanks to API 650, API 620, and BS EN 14015 for crude oil, refined products, produced water, and chemical storage applications at terminals, tank farms, and flow stations across Nigeria.
+            We also fabricate atmospheric and low-pressure storage tanks to API 650, API 620, and BS EN 14015 for crude
+            oil, refined products, produced water, and chemical storage at terminals, tank farms, and distribution
+            facilities across Lagos and Nigeria.
           </p>
           <div class="svc-features">
             <span class="svc-feature">ASME VIII Div. 1 & 2 pressure vessels</span>
@@ -165,70 +490,55 @@
           </div>
         </div>
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.45">
-              <!-- horizontal vessel -->
-              <rect x="60" y="100" width="280" height="100" rx="50"/>
-              <ellipse cx="60" cy="150" rx="50" ry="50"/>
-              <ellipse cx="340" cy="150" rx="50" ry="50"/>
-              <!-- nozzles top -->
-              <rect x="140" y="70" width="16" height="30"/>
-              <rect x="230" y="70" width="16" height="30"/>
-              <!-- nozzle bottom -->
-              <rect x="185" y="200" width="16" height="30"/>
-              <!-- flanges on nozzles -->
-              <rect x="132" y="66" width="32" height="6"/>
-              <rect x="222" y="66" width="32" height="6"/>
-              <rect x="177" y="228" width="32" height="6"/>
-              <!-- saddle supports -->
-              <path d="M120 200 L100 240 L140 240 Z"/>
-              <path d="M280 200 L260 240 L300 240 Z"/>
-              <line x1="90" y1="240" x2="310" y2="240"/>
-            </g>
-            <text x="200" y="285" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">THREE-PHASE SEPARATOR</text>
-          </svg>
+          <!-- Replace src with your pressure vessel photo e.g. src="assets/services/pressure-vessel.jpg" -->
+          <img src="/assets/Aluminum Stainless Rail and Glass Rails!/ASRG (2).jpeg" alt="Pressure vessel fabrication — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/pressure-vessel.jpg</span>
+          </div>
         </div>
       </div>
 
       <!-- 04 Mechanical Engineering -->
       <div class="service-block reveal" id="mechanical">
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.45">
-              <!-- gear large -->
-              <circle cx="160" cy="150" r="60"/>
-              <circle cx="160" cy="150" r="35"/>
-              <!-- gear teeth -->
-              <rect x="94" y="144" width="16" height="12" rx="2"/>
-              <rect x="210" y="144" width="16" height="12" rx="2"/>
-              <rect x="154" y="84" width="12" height="16" rx="2"/>
-              <rect x="154" y="200" width="12" height="16" rx="2"/>
-              <rect x="106" y="102" width="12" height="10" rx="2" transform="rotate(-45 106 102)"/>
-              <rect x="202" y="188" width="12" height="10" rx="2" transform="rotate(-45 202 188)"/>
-              <!-- small gear -->
-              <circle cx="295" cy="130" r="40"/>
-              <circle cx="295" cy="130" r="22"/>
-              <rect x="249" y="124" width="12" height="12" rx="2"/>
-              <rect x="334" y="124" width="12" height="12" rx="2"/>
-              <rect x="289" y="84" width="12" height="12" rx="2"/>
-              <rect x="289" y="170" width="12" height="12" rx="2"/>
-            </g>
-            <text x="200" y="295" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">MECHANICAL DESIGN</text>
-          </svg>
+          <!-- Replace src with your mechanical engineering photo e.g. src="assets/services/mechanical.jpg" -->
+          <img src="/assets/Cladding Carport And Lightning/CC4.jpeg" alt="Mechanical engineering design — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/mechanical.jpg</span>
+          </div>
         </div>
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+            </svg>
           </div>
           <div class="section-tag">04</div>
-          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Mechanical<br><em>Engineering</em></h2>
+          <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Mechanical<br><em>Engineering</em>
+          </h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Our in-house mechanical engineering team provides the full engineering design service — from conceptual layout and 3D modelling through to detailed design, material selection, analysis, and complete documentation packages ready for NUPRC/DPR submission and client approval.
+            Our in-house mechanical engineering team in Lagos provides the full engineering design service — from
+            conceptual layout and 3D modelling through to detailed design, material selection, stress analysis, and
+            complete documentation packages ready for NUPRC submission and client approval.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            All engineering work is performed by COREN-registered Professional Engineers using AVEVA E3D (3D plant design), AutoCAD, CAESAR II (pipe stress analysis), PV Elite (vessel design), and STAAD.Pro (structural analysis).
+            All engineering work is performed by COREN-registered Professional Engineers using AVEVA E3D (3D plant
+            design), AutoCAD, CAESAR II (pipe stress analysis), PV Elite (vessel design), and STAAD.Pro (structural
+            analysis).
           </p>
           <div class="svc-features">
             <span class="svc-feature">3D plant and equipment modelling (AVEVA E3D)</span>
@@ -245,15 +555,21 @@
       <div class="service-block reveal" id="ndt">
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
           </div>
           <div class="section-tag">05</div>
           <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">NDT &amp;<br><em>Inspection</em></h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Olasco operates a fully equipped, independent NDT and inspection division. Our Level II and Level III certified technicians carry out non-destructive testing on all weld joints and base materials — ensuring structural integrity before any fabricated item leaves our facility.
+            Olasco operates a fully equipped, independent NDT and inspection division based in Lagos. Our Level II and
+            Level III certified technicians carry out non-destructive testing on all weld joints and base materials —
+            ensuring structural integrity before any fabricated item leaves our Iganmu facility.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Our inspection services also include third-party inspection support, dimensional verification, material certification review (MTC traceability), positive material identification (PMI), hardness testing, and coating/painting inspection per applicable standards.
+            Our inspection services also include third-party inspection support, dimensional verification, material
+            certification review (MTC traceability), positive material identification (PMI), hardness testing, and
+            coating/painting inspection to applicable standards.
           </p>
           <div class="svc-features">
             <span class="svc-feature">Ultrasonic Testing (UT) — manual and phased array (PAUT)</span>
@@ -265,65 +581,58 @@
           </div>
         </div>
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.4">
-              <!-- waveform -->
-              <polyline points="30,150 60,150 80,80 100,220 120,150 160,150 180,100 200,200 220,150 260,150 280,60 300,240 320,150 370,150"/>
-              <!-- baseline -->
-              <line x1="30" y1="150" x2="370" y2="150" stroke-dasharray="4,4" opacity="0.3"/>
-              <!-- vertical markers -->
-              <line x1="80" y1="60" x2="80" y2="240" stroke-dasharray="3,3" opacity="0.2"/>
-              <line x1="280" y1="40" x2="280" y2="260" stroke-dasharray="3,3" opacity="0.2"/>
-              <!-- defect highlight -->
-              <rect x="260" y="40" width="60" height="220" fill="#E8530A" fill-opacity="0.04"/>
-            </g>
-            <text x="200" y="285" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">ULTRASONIC SCAN</text>
-          </svg>
+          <!-- Replace src with your NDT/inspection photo e.g. src="assets/services/ndt.jpg" -->
+          <img src="/assets/Design Gates And Fence Grill!/16.jpeg" alt="NDT and inspection services — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/ndt.jpg</span>
+          </div>
         </div>
       </div>
 
       <!-- 06 Modular Construction -->
       <div class="service-block reveal" id="modular">
         <div class="svc-visual">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#1a1d21"/>
-            <g stroke="#E8530A" stroke-width="1" fill="none" opacity="0.45">
-              <!-- Skid base frame -->
-              <rect x="40" y="200" width="320" height="20" rx="2"/>
-              <!-- Vertical supports -->
-              <rect x="60" y="100" width="12" height="100"/><rect x="180" y="100" width="12" height="100"/>
-              <rect x="300" y="100" width="12" height="100"/><rect x="328" y="100" width="12" height="100"/>
-              <!-- Top frame -->
-              <rect x="40" y="88" width="320" height="12" rx="2"/>
-              <!-- Equipment boxes -->
-              <rect x="80" y="110" width="70" height="70" rx="3"/>
-              <rect x="200" y="120" width="80" height="60" rx="3"/>
-              <!-- Pipe connections -->
-              <line x1="150" y1="145" x2="200" y2="145"/>
-              <line x1="280" y1="150" x2="340" y2="150"/>
-              <circle cx="165" cy="145" r="6"/>
-              <circle cx="195" cy="145" r="6"/>
-              <!-- Stairs -->
-              <line x1="40" y1="200" x2="20" y2="260"/>
-              <line x1="20" y1="218" x2="38" y2="218"/>
-              <line x1="14" y1="236" x2="32" y2="236"/>
-              <line x1="8" y1="254" x2="26" y2="254"/>
-            </g>
-            <text x="200" y="290" text-anchor="middle" fill="#E8530A" fill-opacity="0.15" font-size="11" font-family="Barlow Condensed" letter-spacing="3">PROCESS MODULE / SKID</text>
-          </svg>
+          <!-- Replace src with your modular construction photo e.g. src="assets/services/modular.jpg" -->
+          <img src="/assets/DoorWindow Balcony Protection Shade/16.jpeg" alt="Modular construction and skid fabrication — Olasco Engineering Lagos"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            onload="this.nextElementSibling.style.display='none';" />
+          <div class="svc-visual-placeholder">
+            <svg viewBox="0 0 24 24">
+              <rect x="1" y="3" width="15" height="13" />
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+            </svg>
+            Add your photo here
+            <span class="svc-visual-label">assets/services/modular.jpg</span>
+          </div>
         </div>
         <div>
           <div class="svc-icon-large">
-            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <svg viewBox="0 0 24 24">
+              <rect x="1" y="3" width="15" height="13" />
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+            </svg>
           </div>
           <div class="section-tag">06</div>
           <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.8rem);">Modular<br><em>Construction</em></h2>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Modular and skid-based fabrication is increasingly the preferred delivery method for Nigerian oil & gas operators — particularly for projects in challenging Niger Delta terrains where on-site construction windows are limited and security or logistics constraints make field work difficult.
+            Modular and skid-based fabrication is increasingly the preferred delivery method for Nigerian oil & gas and
+            industrial operators — particularly for projects where on-site construction windows are limited, or where
+            logistics from Lagos to site require a high level of pre-commissioning at the fabrication stage.
           </p>
           <p style="font-size:0.9rem; font-weight:300; color:var(--steel); line-height:1.8; margin-bottom:1.5rem;">
-            Olasco fabricates complete process modules — fully assembled, tested, and commissioned in our Trans-Amadi facility before transportation to site. This reduces on-site man-hours, compresses schedules, and dramatically reduces exposure to site-based HSE risks.
+            Olasco fabricates complete process modules — fully assembled, tested, and commissioned at our Iganmu, Lagos
+            facility before transportation to site. This reduces on-site man-hours, compresses schedules, and
+            significantly reduces exposure to site-based HSE risks.
           </p>
           <div class="svc-features">
             <span class="svc-feature">Wellhead, separator, and metering skids</span>
@@ -331,7 +640,7 @@
             <span class="svc-feature">Pump and compressor skids</span>
             <span class="svc-feature">Electrical and instrumentation (E&I) hook-up</span>
             <span class="svc-feature">Factory Acceptance Test (FAT) facilitation</span>
-            <span class="svc-feature">Barge-ready and helicopter-lift module packages</span>
+            <span class="svc-feature">Barge-ready and road-transport module packages</span>
           </div>
         </div>
       </div>
@@ -345,7 +654,8 @@
       <div class="cta-inner">
         <h2>Need a service<br>not listed <em>here?</em></h2>
         <div class="cta-right">
-          <p>Our capabilities extend beyond this list. Talk to our engineering team about your specific requirements — we're confident we can help.</p>
+          <p>Our capabilities extend beyond this list. Talk to our Lagos-based engineering team about your specific
+            requirements — we're confident we can help.</p>
           <a href="contact.html" class="btn btn-primary">Discuss Your Project →</a>
         </div>
       </div>
@@ -357,4 +667,5 @@
   <script src="js/layout.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>

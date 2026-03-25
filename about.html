@@ -12,6 +12,149 @@
   <link rel="stylesheet" href="css/pages.css" />
 
   <style>
+    /* ── PAGE HERO (rebuilt for mobile-first) ── */
+    .page-hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-top: var(--nav-h, 72px);
+      /* min height scales with viewport: tall on desktop, reasonable on mobile */
+      min-height: clamp(260px, 46vw, 520px);
+      padding-bottom: 3rem;
+    }
+
+    /* dark photo/gradient background */
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(8, 9, 12, 0.92) 0%, rgba(12, 14, 18, 0.70) 55%, rgba(8, 9, 12, 0.88) 100%),
+        url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1400&auto=format&fit=crop&q=70') center/cover no-repeat;
+      z-index: 0;
+    }
+
+    /* subtle engineering-grid overlay */
+    .page-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232, 83, 10, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 83, 10, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      z-index: 1;
+    }
+
+    /* orange accent line on the left */
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 3px;
+      background: var(--flame, #E8530A);
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .page-hero-inner {
+      position: relative;
+      z-index: 3;
+      padding: 0 clamp(1.25rem, 6vw, 5rem);
+    }
+
+    .page-hero-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--flame, #E8530A);
+      border: 1px solid rgba(232, 83, 10, 0.45);
+      padding: 0.28rem 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .page-hero-inner h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.92;
+      color: #fff;
+      /* fluid type: ~36px on 320px screen → ~96px on 1400px */
+      font-size: clamp(2.25rem, 8vw, 6rem);
+      margin: 0 0 1rem;
+    }
+
+    .page-hero-inner h1 em {
+      font-style: normal;
+      color: var(--flame, #E8530A);
+      -webkit-text-stroke: 0;
+    }
+
+    /* tagline under the h1 */
+    .page-hero-sub {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.62);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0;
+    }
+
+    /* breadcrumb — sits at the bottom-right */
+    .breadcrumb {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: rgba(255, 255, 255, 0.42);
+      padding: 1.5rem clamp(1.25rem, 6vw, 5rem) 0;
+    }
+
+    .breadcrumb a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--flame, #E8530A);
+    }
+
+    .breadcrumb span:last-child {
+      color: var(--flame, #E8530A);
+    }
+
+    /* ── Mobile overrides ── */
+    @media (max-width: 640px) {
+      .page-hero {
+        min-height: clamp(220px, 70vw, 340px);
+        padding-bottom: 2rem;
+      }
+
+      .page-hero::before {
+        display: none;
+      }
+
+      /* hide accent bar on very small screens */
+      .page-hero-sub {
+        display: none;
+      }
+
+      /* keep mobile clean — just title */
+      .breadcrumb {
+        padding-top: 1rem;
+      }
+    }
+
     /* CAC Certificate Card */
     .cert-image-card {
       background: var(--plate);
@@ -21,6 +164,12 @@
       align-items: center;
       gap: 1rem;
       grid-column: span 3;
+    }
+
+    @media (max-width: 768px) {
+      .cert-image-card {
+        grid-column: span 1;
+      }
     }
 
     .cert-image-card .cert-label {
@@ -128,6 +277,85 @@
     #cert-lightbox-close:hover {
       opacity: 1;
     }
+
+    /* ══════════════════════════════════════════
+       MOBILE-RESPONSIVE SECTION LAYOUTS
+    ══════════════════════════════════════════ */
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 6rem;
+    }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(232, 83, 10, 0.08);
+      margin-top: 3rem;
+    }
+
+    /* Tablet: ≤ 900px */
+    @media (max-width: 900px) {
+      .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .timeline-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cert-image-card {
+        grid-column: span 2 !important;
+      }
+    }
+
+    /* Mobile: ≤ 600px */
+    @media (max-width: 600px) {
+      .mission-grid {
+        gap: 1.5rem;
+      }
+
+      .timeline-grid {
+        gap: 1.5rem;
+      }
+
+      .cert-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cert-image-card {
+        grid-column: span 1 !important;
+        padding: 1.5rem 1rem;
+      }
+
+      /* values + team go single-column */
+      .values-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .section-title {
+        font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+      }
+    }
   </style>
 </head>
 
@@ -136,12 +364,16 @@
   <div id="nav-placeholder"></div>
 
   <!-- PAGE HERO -->
-  <div class="page-hero" style="padding-top: var(--nav-h);">
+  <div class="page-hero">
     <div class="page-hero-bg"></div>
     <div class="page-hero-grid"></div>
     <div class="page-hero-inner">
       <div class="page-hero-tag">Our Story</div>
       <h1>About<br><em>Olasco</em></h1>
+      <p class="page-hero-sub">
+        Over 23 years of precision fabrication and structural engineering —<br>
+        built in Lagos, trusted across Nigeria.
+      </p>
     </div>
     <div class="breadcrumb">
       <a href="index.html">Home</a>
@@ -153,20 +385,20 @@
   <!-- MISSION -->
   <div style="background: var(--forge);">
     <div class="container section">
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;" class="reveal">
+      <div class="mission-grid reveal">
         <div>
           <div class="section-tag">Our Mission</div>
-          <h2 class="section-title">Engineering<br><em>Excellence</em> from the<br>Heart of Nigeria</h2>
+          <h2 class="section-title">Engineering<br><em>Excellence</em> from the<br>Heart of Lagos</h2>
         </div>
         <div>
           <p style="font-size:1.05rem; font-weight:300; color: var(--steel); line-height:1.85; margin-bottom:1.25rem;">
-            Olasco Engineering & Fabrication Ltd was founded in 2001 in Port Harcourt with a single conviction: that
+            Olasco Engineering & Fabrication Ltd was founded in 2001 in Lagos with a single conviction: that
             Nigerian engineers and fabricators could meet — and exceed — international standards on home soil.
           </p>
           <p style="font-size:0.95rem; font-weight:300; color: var(--steel); line-height:1.85;">
             Over two decades later, we have completed over 420 projects across Nigeria's upstream, midstream,
-            downstream, marine, and power sectors. From pipe spools on the Escravos Gas-to-Liquids Plant to structural
-            steel packages for NLNG Bonny Island, every weld carries the mark of Olasco precision.
+            downstream, marine, and power sectors. From pipe spools at Apapa Port to structural steel packages for
+            major offshore operators, every weld carries the mark of Olasco precision.
           </p>
         </div>
       </div>
@@ -201,8 +433,8 @@
           <div class="value-n">03</div>
           <div class="value-name">Nigerian Excellence</div>
           <p class="value-desc">We are fiercely proud to be Nigerian. We invest in training our people, sourcing
-            locally, and proving that world-class fabrication and engineering capability exists right here in Rivers
-            State.</p>
+            locally, and proving that world-class fabrication and engineering capability exists right here in
+            Lagos State.</p>
         </div>
         <div class="value-card">
           <div class="value-n">04</div>
@@ -231,29 +463,29 @@
   <!-- HISTORY TIMELINE -->
   <div style="background: var(--forge);">
     <div class="container section">
-      <div style="display:grid; grid-template-columns: 1fr 1.4fr; gap: 6rem;">
+      <div class="timeline-grid">
         <div class="reveal">
           <div class="section-tag">Our Journey</div>
           <h2 class="section-title">Two Decades<br>of <em>Growth</em></h2>
-          <p class="section-lead">From a small workshop in Rumuola to a 12,000 m² fabrication facility in Trans-Amadi —
-            the Olasco story is one of relentless investment in Nigerian engineering capability.</p>
+          <p class="section-lead">From a small workshop in Iganmu to a 12,000 m² fabrication facility in the heart
+            of Lagos Industrial Estate — the Olasco story is one of relentless investment in Nigerian engineering
+            capability.</p>
         </div>
         <div class="timeline reveal">
           <div class="tl-item">
             <div class="tl-dot"></div>
             <div class="tl-year">2001</div>
             <div class="tl-title">Company Founded</div>
-            <p class="tl-text">Olasco Engineering & Fabrication Ltd incorporated in Port Harcourt. First workshop
-              established in Rumuola with a team of 12. First contract: structural fabrication for a Shell SPDC flow
-              station in Bayelsa.</p>
+            <p class="tl-text">Olasco Engineering & Fabrication Ltd incorporated in Lagos. First workshop
+              established in Iganmu with a team of 12. First contract: structural fabrication for a major
+              oil & gas flow station client.</p>
           </div>
           <div class="tl-item">
             <div class="tl-dot"></div>
             <div class="tl-year">2005</div>
-            <div class="tl-title">Trans-Amadi Facility</div>
-            <p class="tl-text">Relocated to and commissioned our current 12,000 m² workshop in Trans-Amadi Industrial
-              Layout, Port Harcourt. Added CNC plasma cutting, hydraulic press brakes, and sub-arc welding capability.
-            </p>
+            <div class="tl-title">Lagos Industrial Estate Facility</div>
+            <p class="tl-text">Relocated to and commissioned our current 12,000 m² workshop at Iganmu Industrial
+              Estate, Lagos. Added CNC plasma cutting, hydraulic press brakes, and sub-arc welding capability.</p>
           </div>
           <div class="tl-item">
             <div class="tl-dot"></div>
@@ -267,7 +499,8 @@
             <div class="tl-year">2013</div>
             <div class="tl-title">NCDMB Pioneer Status</div>
             <p class="tl-text">Awarded Pioneer Fabricator status by the Nigerian Content Development & Monitoring Board.
-              Secured first major NLNG contract — structural steel for the utility area of Bonny Island.</p>
+              Secured first major offshore structural steel contract for operations in the Lagos/Bight of Benin basin.
+            </p>
           </div>
           <div class="tl-item">
             <div class="tl-dot"></div>
@@ -280,10 +513,10 @@
           <div class="tl-item">
             <div class="tl-dot"></div>
             <div class="tl-year">2024</div>
-            <div class="tl-title">NLNG Train 7 &mdash; Landmark Project</div>
-            <p class="tl-text">Completed delivery of 1,200+ tonnes of structural steel for NLNG Train 7 — the largest
-              single fabrication contract in Olasco history. Workforce now exceeds 280 permanent staff and 140 contract
-              artisans.</p>
+            <div class="tl-title">Apapa Terminal &mdash; Landmark Project</div>
+            <p class="tl-text">Completed delivery of 1,200+ tonnes of structural steel for a major Lagos Port
+              terminal expansion — the largest single fabrication contract in Olasco history. Workforce now
+              exceeds 280 permanent staff and 140 contract artisans.</p>
           </div>
         </div>
       </div>
@@ -307,7 +540,7 @@
           <div class="team-info">
             <div class="team-name">Engr. Emmanuel Okafor</div>
             <div class="team-role">Managing Director / CEO</div>
-            <p class="team-cred">B.Eng Mechanical (UNIPORT), M.Sc Production Engineering (UCL London). COREN Fellow. 28
+            <p class="team-cred">B.Eng Mechanical (UNILAG), M.Sc Production Engineering (UCL London). COREN Fellow. 28
               years in oil & gas fabrication.</p>
           </div>
         </div>
@@ -351,10 +584,7 @@
         <p class="section-lead">Every Olasco project is governed by a comprehensive quality management framework that
           meets both Nigerian regulatory requirements and international industry standards.</p>
       </div>
-      <div
-        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(232,83,10,0.08); margin-top: 3rem;"
-        class="reveal">
-        <!-- cert cards -->
+      <div class="cert-grid reveal">
         <div style="background: var(--plate); padding: 2rem 1.75rem;">
           <div
             style="font-family: 'Barlow Condensed',sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--flame); margin-bottom: 0.5rem;">
@@ -402,8 +632,8 @@
           <div style="font-size: 0.875rem; font-weight: 600; color: #fff; margin-bottom: 0.4rem;">Approved Upstream
             Contractor</div>
           <p style="font-size: 0.82rem; font-weight: 300; color: var(--steel); line-height: 1.65;">Registered and
-            approved contractor on the Nigerian Upstream Petroleum Regulatory Commission (formerly DPR) vendor database
-            for all upstream fabrication categories.</p>
+            approved contractor on the Nigerian Upstream Petroleum Regulatory Commission vendor database for all
+            upstream fabrication categories.</p>
         </div>
         <div style="background: var(--plate); padding: 2rem 1.75rem;">
           <div
@@ -449,7 +679,7 @@
       <div class="cta-inner">
         <h2>Ready to partner<br>with <em>Olasco?</em></h2>
         <div class="cta-right">
-          <p>Contact our project team in Port Harcourt today. We're ready to review your scope and deliver a detailed,
+          <p>Contact our project team in Lagos today. We're ready to review your scope and deliver a detailed,
             competitive proposal.</p>
           <div style="display:flex; gap:1rem; flex-wrap:wrap;">
             <a href="contact.html" class="btn btn-primary">Contact Us →</a>
